@@ -1,6 +1,6 @@
 # timetap
 
-App to be able to clock in quickly and easily
+Flutter app to be able to clock in quickly and easily
 
 ## Getting Started
 
