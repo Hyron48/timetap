@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="510px" height="518px" viewBox="0 0 510 518" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(5, 5)">
+            <path d="M50,250 C50,360.45695 139.54305,450 250,450 M450,250 C450,139.54305 360.45695,50 250,50" id="Shape" stroke="#004DA8" stroke-width="10" fill-opacity="0" fill="#D8D8D8" stroke-linecap="round"></path>
+            <path d="M0,250 C0,388.071187 111.928813,500 250,500 M500,250 C500,111.928813 388.071187,0 250,0" id="Shape" stroke="#004DA8" stroke-width="10" fill-opacity="0" fill="#D8D8D8" stroke-linecap="round"></path>
+            <ellipse id="Oval" stroke="#004DA8" fill="#004DA8" transform="translate(250, 102) rotate(-180) translate(-250, -102)" cx="250" cy="102" rx="5.5" ry="19.5"></ellipse>
+            <ellipse id="Oval" stroke="#004DA8" fill="#004DA8" transform="translate(354, 354) rotate(-225) translate(-354, -354)" cx="354" cy="354" rx="5.5" ry="19.5"></ellipse>
+            <ellipse id="Oval" stroke="#004DA8" fill="#004DA8" transform="translate(398, 250) rotate(-270) translate(-398, -250)" cx="398" cy="250" rx="5.5" ry="19.5"></ellipse>
+            <ellipse id="Oval" stroke="#004DA8" fill="#004DA8" transform="translate(102, 250) rotate(-270) translate(-102, -250)" cx="102" cy="250" rx="5.5" ry="19.5"></ellipse>
+            <ellipse id="Oval" stroke="#004DA8" fill="#004DA8" transform="translate(146, 354) rotate(-315) translate(-146, -354)" cx="146" cy="354" rx="5.5" ry="19.5"></ellipse>
+            <ellipse id="Oval" stroke="#004DA8" fill="#004DA8" transform="translate(146, 146) rotate(-225) translate(-146, -146)" cx="146" cy="146" rx="5.5" ry="19.5"></ellipse>
+            <path d="M249.999487,391.567 L293.262487,403.159 L305,443.272151 L250,511 L249.999487,391.567 Z M263.284695,257 L277.5,277.542163 L263.284695,300.7099 L273.868487,336.88 L249.999487,330.485 L250,257 L263.284695,257 Z" id="Combined-Shape" stroke="#004DA8" fill="#004DA8" stroke-linecap="round"></path>
+            <path d="M213.955,381.909 L251,391.835 L251,511 L196,443.272151 L213.955,381.909 Z M251,257 L251,330.753 L230.529,325.268 L237.715305,300.7099 L223.5,277.542163 L237.715305,257 L251,257 Z" id="Combined-Shape" stroke="#004DA8" fill="#004DA8" stroke-linecap="round"></path>
+            <path d="M249.258492,391.885596 L251.606491,392.514675 L251.607444,508.595 L249.25936,508.595 L249.258492,391.885596 Z M251.607442,257.5 L251.606496,330.397407 L249.258492,329.768327 L249.259357,257.5 L251.607442,257.5 Z" id="Combined-Shape" stroke="#004DA8" fill="#004DA8"></path>
+            <path d="M199,151 C199,151 200.851806,151 204.555418,151 L210.5,158.11697 L204.555418,166.143587 L222,215.535234 L199,239" id="Combined-Shape" stroke="#004DA8" fill="#004DA8" transform="translate(210.5, 195) scale(-1, 1) rotate(-135) translate(-210.5, -195)"></path>
+            <path d="M183,167 C183,167 184.851806,167 188.555418,167 L194.5,174.11697 L188.555418,182.143587 L206,231.535234 L183,255" id="Combined-Shape" stroke="#004DA8" fill="#004DA8" transform="translate(194.5, 211) rotate(-225) translate(-194.5, -211)"></path>
+            <path d="M220.52991,339.074865 C234.30745,339.258878 245.012616,339.396273 252.645408,339.48705 C264.030275,339.622452 269.877387,339.966459 277.511561,352.415574 C282.597613,360.709444 289.431348,372.288838 298.010953,387.151572 C276.707802,386.556794 257.331301,386.259424 239.881451,386.259424 C234.127846,386.259424 228.727723,385.697703 225.000602,383.193129 C222.087446,381.235528 220.238082,378.07247 220.049442,373.077962 C219.998197,371.721176 219.97103,369.954834 219.967789,367.779555 L219.967597,367.037146 C219.97335,360.803561 220.160134,351.482122 220.52991,339.074865 Z" id="Rectangle" stroke="#DC0000" fill="#DC0000" transform="translate(259.1797, 363.1224) rotate(-345) translate(-259.1797, -363.1224)"></path>
+            <circle id="Oval" stroke="#004DA8" stroke-width="10" fill="#FFFFFF" cx="250" cy="250" r="20"></circle>
+        </g>
+    </g>
+</svg>
