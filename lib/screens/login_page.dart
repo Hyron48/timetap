@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timetap/language/language.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,42 +13,55 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
 
+  final RegExp emailRegex = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  final RegExp passwordRegex = RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Login Page'),
+          title: Text(Languages.of(context)!.languageLoginLabels.title),
         ),
         body: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(32.0),
             child: Center(
                 child: Form(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   key: formKey,
                   child: Column(
                     children: <Widget>[
                       TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Name',
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Name is required';
-                            }
-                            return null;
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: InputDecoration(
+                          labelText:
+                          Languages.of(context)!.languageLoginLabels.email,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return  Languages.of(context)!.validationLabels.fieldEmpty;
                           }
+                          if (!emailRegex.hasMatch(value)) {
+                            return  Languages.of(context)!.validationLabels.fieldNotValid;
+                          }
+                            return null;
+                          },
                       ),
                       SizedBox(height: 16),
                       TextFormField(
+                        obscureText: true,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: InputDecoration(
-                          labelText: 'Email',
+                          labelText: Languages.of(context)!.languageLoginLabels.password,
+                          errorMaxLines: 3,
                         ),
                         validator: (value) {
-                          if (value == null || value.isEmpty || !value.contains('@')) {
-                            return 'Invalid email address';
+                          if (value == null || value.isEmpty) {
+                            return  Languages.of(context)!.validationLabels.fieldEmpty;
                           }
-                          return null;
-                        },
+                          if (!passwordRegex.hasMatch(value)) {
+                            return  Languages.of(context)!.validationLabels.passwordNotValid;
+                          }
+                            return null;
+                          },
                       ),
                       SizedBox(height: 16),
                       ElevatedButton(

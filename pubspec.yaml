@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  shared_preferences: ^2.2.3
 
   provider: ^6.0.5
   english_words: ^4.0.0
@@ -24,5 +27,6 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/svg/appLogo.svg
+    - assets/svg/eye.svg
+    - assets/svg/eyeSlash.svg
   uses-material-design: true

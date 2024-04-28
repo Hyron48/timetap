@@ -1,51 +1,69 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:timetap/localization/delegation.dart';
+import 'localization/constant.dart';
 import 'screens/login_page.dart';
 
 void main() {
-  runApp(const TimeTap());
+  runApp(const TimeTapApp());
 }
 
-class TimeTap extends StatelessWidget {
-  const TimeTap({super.key});
+class TimeTapApp extends StatefulWidget {
+  const TimeTapApp({super.key});
+
+  static void setLocale(BuildContext context, Locale newLocale) {
+    var state = context.findAncestorStateOfType<TimeTapState>();
+    state?.setLocale(newLocale);
+  }
+
+  @override
+  State<StatefulWidget> createState() => TimeTapState();
+}
+
+class TimeTapState extends State<TimeTapApp> {
+  Locale? _locale;
+
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+  @override
+  void didChangeDependencies() async {
+    getLocale().then((locale) {
+      setState(() {
+        _locale = locale;
+      });
+    });
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'TimeTap',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        ),
-        home: MyHomePage(),
-      ),
-    );
-  }
-}
-
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
-
-  void changeValue() {
-    this.current = WordPair.random();
-    notifyListeners();
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
     return MaterialApp(
       title: 'TimeTap',
-      initialRoute: '/login',
-      routes: {
-        '/login': (context) => LoginPage()
+      locale: _locale,
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('it', ''),
+      ],
+      localizationsDelegates: const [
+        AppLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (var supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode &&
+              supportedLocale.countryCode == locale?.countryCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
       },
+      home: LoginPage(),
     );
   }
 }
