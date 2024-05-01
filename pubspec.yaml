@@ -27,6 +27,5 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/svg/eye.svg
-    - assets/svg/eyeSlash.svg
+    - assets/
   uses-material-design: true
