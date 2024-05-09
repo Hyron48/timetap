@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:timetap/language/language.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,7 +22,7 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(Languages.of(context)!.languageLoginLabels.title),
+          title: Text('temp'),
         ),
         body: Padding(
             padding: const EdgeInsets.all(32.0),
@@ -36,18 +35,14 @@ class LoginPageState extends State<LoginPage> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(
                       labelText:
-                          Languages.of(context)!.languageLoginLabels.email,
+                          'temp'
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return Languages.of(context)!
-                            .validationLabels
-                            .fieldEmpty;
+                        return 'temp';
                       }
                       if (!emailRegex.hasMatch(value)) {
-                        return Languages.of(context)!
-                            .validationLabels
-                            .fieldNotValid;
+                        return 'temp';
                       }
                       return null;
                     },
@@ -57,7 +52,7 @@ class LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(
-                      labelText: Languages.of(context)!.languageLoginLabels.password,
+                      labelText: 'temp',
                       errorMaxLines: 3,
                       suffixIcon: InkWell(
                         child: Padding(
@@ -72,14 +67,10 @@ class LoginPageState extends State<LoginPage> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return Languages.of(context)!
-                            .validationLabels
-                            .fieldEmpty;
+                        return 'temp';
                       }
                       if (!passwordRegex.hasMatch(value)) {
-                        return Languages.of(context)!
-                            .validationLabels
-                            .passwordNotValid;
+                        return 'temp';
                       }
                       return null;
                     },
