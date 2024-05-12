@@ -5,7 +5,7 @@ import '../ui/login_page.dart';
 class Routes {
   static const String initialRoute = '/';
 
-  static Route<dynamic> generateRoute(RouteSettings settings, AuthRepository authRepository) {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
     Widget page;
 
     switch (settings.name) {

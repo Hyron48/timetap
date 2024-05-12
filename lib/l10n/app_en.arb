@@ -1,3 +1,11 @@
 {
-  "appTitle": "Time Tap"
+  "appTitle": "Time Tap",
+  "loginTitle": "Login ENG",
+  "email": "Email",
+  "password": "Password",
+  "loginButton": "Login",
+
+  "isFieldEmpty": "Required field.",
+  "fieldNotValid": "Field not valid.",
+  "passwordNotValid": "The password must be at least eight characters, at least one letter and one number."
 }

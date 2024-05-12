@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timetap/repository/auth_repository.dart';
@@ -7,23 +6,23 @@ import '../../models/login_model.dart';
 import '../../utils/enum.dart';
 
 part 'auth_events.dart';
+
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required AuthRepository authRepository,
-  }) : _authRepository = authRepository,
+  })  : _authRepository = authRepository,
         super(
-        authRepository.currentLoginModel.isNotEmpty && authRepository.currentLoginModel.isLogged
-            ? AuthState.authenticated(authRepository.currentLoginModel)
-            : const AuthState.unauthenticated(),
-      ) {
+          authRepository.currentLoginModel.isNotEmpty &&
+                  authRepository.currentLoginModel.isLogged
+              ? AuthState.authenticated(authRepository.currentLoginModel)
+              : const AuthState.unauthenticated(),
+        ) {
     on<AuthStateChanged>(_onAuthStateChanged);
 
     _authRepositorySubscription = _authRepository.authStateStream.listen(
-          (authState) => add(
-          AuthStateChanged(authState)
-      ),
+      (authState) => add(AuthStateChanged(authState)),
     );
   }
 

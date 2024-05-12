@@ -4,7 +4,7 @@ import '../models/interfaces/i_secure_storage.dart';
 
 class LocaleCubit extends Cubit<Locale> {
   LocaleCubit() : super(
-      const Locale('en', 'EN')
+      const Locale('it', 'IT')
   );
 
   void setLanguage({required Locale locale}) async {

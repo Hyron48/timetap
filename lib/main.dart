@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timetap/bloc/auth/auth_bloc.dart';
 import 'package:timetap/repository/auth_repository.dart';
-import 'package:timetap/ui/login_page.dart';
 import 'package:timetap/utils/flavor_config.dart';
 import 'package:timetap/utils/routes.dart';
 import 'bloc/locale_cubit.dart';
+import 'bloc/observer.dart';
 import 'models/interfaces/i_secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -26,6 +26,33 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+
+  final AuthRepository authRepository = AuthRepository();
+  await authRepository.loadCurrentLoginModel();
+  await ISecureStorage().setDefaultLanguage(locale: Locale('it', 'IT'));
+
+  Bloc.observer = Observer();
+
+  print('start');
+  runApp(
+    RepositoryProvider.value(
+      value: authRepository,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (_) => AuthBloc(
+              authRepository: authRepository,
+            ),
+          ),
+          BlocProvider<LocaleCubit>(
+            create: (_) => LocaleCubit(),
+          ),
+        ],
+        child: const MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -43,11 +70,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
   }
 
   Future<void> localization() async {
     userLocale = await ISecureStorage().getUserLocale();
-    setState(() {});
+    print('wor >  ${userLocale}');
   }
 
   @override
@@ -56,18 +84,13 @@ class _MyAppState extends State<MyApp> {
       buildWhen: (currentLocale, newLocale) => newLocale.languageCode != AppLocalizations.of(context)?.localeName,
       builder: (BuildContext contextLocale, Locale locale) {
         localization();
-        return BlocBuilder<AuthBloc, AuthState>(
-          buildWhen: (AuthState current, AuthState next) => current.authStatus != next.authStatus,
-          builder: (BuildContext contextProfile, AuthState authState) {
-            return MaterialApp(
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              debugShowCheckedModeBanner: false,
-              themeMode: ThemeMode.light,
-              locale: userLocale ?? locale,
-              onGenerateRoute: (RouteSettings settings) => Routes.generateRoute(settings, contextProfile.read<AuthRepository>()),
-            );
-          },
+        return MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          debugShowCheckedModeBanner: false,
+          themeMode: ThemeMode.light,
+          locale: userLocale ?? locale,
+          onGenerateRoute: (RouteSettings settings) => Routes.generateRoute(settings),
         );
       },
     );

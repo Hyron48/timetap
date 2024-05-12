@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import '../bloc/auth/auth_bloc.dart';
 import '../dio/dio_config.dart';
 import '../models/interfaces/i_secure_storage.dart';
@@ -12,22 +13,20 @@ import '../utils/flavor_config.dart';
 class AuthRepository {
   static final Dio _dio = DioConfig().dio;
   static late LoginModel _loginModel;
-  static final StreamController<AuthState> authStateStreamController = StreamController<AuthState>();
+  static final StreamController<AuthState> authStateStreamController =
+      StreamController<AuthState>();
   final ISecureStorage secureStorage = ISecureStorage();
 
   LoginModel get currentLoginModel => _loginModel;
 
   AuthRepository();
 
-  Future<void> login({
-    required String email,
-    required String password,
-    required bool rememberMeSwitch
-  }) async {
-    Uri uri = Uri.https(
-        FlavorConfig.instance.values.appUrl,
-        "${FlavorConfig.instance.values.apiVersion}/login"
-    );
+  Future<void> login(
+      {required String email,
+      required String password,
+      required bool rememberMeSwitch}) async {
+    Uri uri = Uri.https(FlavorConfig.instance.values.appUrl,
+        "${FlavorConfig.instance.values.apiVersion}/login");
 
     try {
       Response<Map<String, dynamic>> response = await _dio.postUri(
@@ -55,7 +54,14 @@ class AuthRepository {
         statusCode: 0,
         message: ex.toString(),
       );
-    } on DioException catch(ex) {
+    } on DioException catch (ex) {}
+  }
+
+  Future<void> loadCurrentLoginModel() async {
+    try {
+      _loginModel = await ISecureStorage().readLoginModel();
+    } on PlatformException {
+      _loginModel = LoginModel.empty;
     }
   }
 
