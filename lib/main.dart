@@ -1,50 +1,97 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'screens/login_page.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:timetap/bloc/auth/auth_bloc.dart';
+import 'package:timetap/repository/auth_repository.dart';
+import 'package:timetap/utils/flavor_config.dart';
+import 'package:timetap/utils/routes.dart';
+import 'bloc/locale_cubit.dart';
+import 'bloc/observer.dart';
+import 'models/interfaces/i_secure_storage.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
-  runApp(const TimeTap());
-}
+void main() async {
+  FlavorConfig(
+    flavor: Flavor.dev,
+    color: Color(0xFF6E6E6E),
+    values: const FlavorValues(
+      appUrl: '',
+      apiVersion: '/api/v1',
+    ),
+  );
 
-class TimeTap extends StatelessWidget {
-  const TimeTap({super.key});
+  WidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'TimeTap',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        ),
-        home: MyHomePage(),
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+
+  final AuthRepository authRepository = AuthRepository();
+  await authRepository.loadCurrentLoginModel();
+  await ISecureStorage().setDefaultLanguage(locale: Locale('it', 'IT'));
+
+  Bloc.observer = Observer();
+
+  print('start');
+  runApp(
+    RepositoryProvider.value(
+      value: authRepository,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (_) => AuthBloc(
+              authRepository: authRepository,
+            ),
+          ),
+          BlocProvider<LocaleCubit>(
+            create: (_) => LocaleCubit(),
+          ),
+        ],
+        child: const MyApp(),
       ),
-    );
-  }
+    ),
+  );
 }
 
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
+class MyApp extends StatefulWidget {
+  const MyApp({
+    super.key,
+  });
 
-  void changeValue() {
-    this.current = WordPair.random();
-    notifyListeners();
-  }
+  @override
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyHomePage extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
+  Locale? userLocale;
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
+  Future<void> localization() async {
+    userLocale = await ISecureStorage().getUserLocale();
+    print('wor >  ${userLocale}');
+  }
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    return MaterialApp(
-      title: 'TimeTap',
-      initialRoute: '/login',
-      routes: {
-        '/login': (context) => LoginPage()
+    return BlocBuilder<LocaleCubit, Locale>(
+      buildWhen: (currentLocale, newLocale) => newLocale.languageCode != AppLocalizations.of(context)?.localeName,
+      builder: (BuildContext contextLocale, Locale locale) {
+        localization();
+        return MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          debugShowCheckedModeBanner: false,
+          themeMode: ThemeMode.light,
+          locale: userLocale ?? locale,
+          onGenerateRoute: (RouteSettings settings) => Routes.generateRoute(settings),
+        );
       },
     );
   }

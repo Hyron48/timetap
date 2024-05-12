@@ -1,0 +1,11 @@
+{
+    "appTitle": "Time Tap",
+    "loginTitle": "Login ITA",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Accedi",
+
+    "isFieldEmpty": "Campo obbligatorio",
+    "fieldNotValid": "Campo non valido",
+    "passwordNotValid": "La password deve essere minimo di otto caratteri, almeno una lettera e un numero."
+}
