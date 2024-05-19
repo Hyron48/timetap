@@ -1,27 +1,30 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:http_interceptor/http/interceptor_contract.dart';
+import 'package:http_interceptor/models/request_data.dart';
+import 'package:http_interceptor/models/response_data.dart';
 import 'package:timetap/utils/enum.dart';
 import '../models/interfaces/i_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../utils/flavor_config.dart';
 
-const Map<ContentType, String> contentTypeMap = {
-	ContentType.applicationJson: "application/json",
-	ContentType.multipart: "multipart/form-data",
-};
-
-class CustomInterceptor {
+class CustomInterceptor implements InterceptorContract {
 	ISecureStorage secureStorageService = ISecureStorage();
+	final String contentType;
 
-	final String? _contentType;
+	CustomInterceptor({this.contentType = 'application/json'});
 
-	CustomInterceptor({ContentType? contentType}) : _contentType = contentTypeMap[contentType ?? ContentType.applicationJson];
+	@override
+	Future<RequestData> interceptRequest({required RequestData data}) async {
+		data.headers['Content-Type'] = contentType;
+		return data;
+	}
 
-	Future<http.Request> intercept(http.BaseRequest request) async {
-		debugPrint('interceptor');
-		return request as http.Request;
+	@override
+	Future<ResponseData> interceptResponse({required ResponseData data}) async {
+		return data;
 	}
 }
 

@@ -15,8 +15,7 @@ void main() async {
     flavor: Flavor.dev,
     color: Color(0xFF6E6E6E),
     values: const FlavorValues(
-      appUrl: '',
-      apiVersion: '/api/v1',
+      appUrl: 'http://localhost:8080',
     ),
   );
 
@@ -34,7 +33,6 @@ void main() async {
 
   Bloc.observer = Observer();
 
-  print('start');
   runApp(
     RepositoryProvider.value(
       value: authRepository,

@@ -14,27 +14,47 @@ class LoginModel extends Equatable {
   @JsonKey(name: 'userPermissions', includeIfNull: false)
   final List<String> userPermissions;
 
-  @JsonKey(name: 'userPermissions', includeIfNull: false, required: false)
+  @JsonKey(name: 'email', includeIfNull: false, required: false)
   final String email;
+
+  @JsonKey(name: 'password', includeIfNull: false, required: false)
+  final String password;
+
+  @JsonKey(name: 'isLogged', includeIfNull: false, required: false)
+  final bool isLogged;
+
+  @JsonKey(name: 'rememberMe', includeIfNull: false, required: false)
+  final bool rememberMe;
 
   const LoginModel({
     required this.jwt,
     required this.refreshToken,
     required this.userPermissions,
+    this.email = '',
+    this.password = '',
+    this.isLogged = false,
+    this.rememberMe = false,
   });
 
   static const empty = LoginModel(
     jwt: '',
     refreshToken: '',
     userPermissions: [],
+    email: '',
+    password: '',
+    isLogged: false,
+    rememberMe: false,
   );
 
-  LoginModel copyWith(
-          {String? jwt, String? refreshToken, List<String>? userPermissions}) =>
+  LoginModel copyWith({String? email, String? password, bool? rememberMe, bool? isLogged}) =>
       LoginModel(
-        jwt: jwt ?? this.jwt,
-        refreshToken: refreshToken ?? this.refreshToken,
-        userPermissions: userPermissions ?? this.userPermissions,
+        email: email ?? this.email,
+        password: password ?? this.password,
+        rememberMe: rememberMe ?? this.rememberMe,
+        isLogged: isLogged ?? this.isLogged,
+        jwt: this.jwt,
+        refreshToken: this.refreshToken,
+        userPermissions: this.userPermissions,
       );
 
   bool get isEmpty => this == LoginModel.empty;
@@ -42,7 +62,15 @@ class LoginModel extends Equatable {
   bool get isNotEmpty => this != LoginModel.empty;
 
   @override
-  List<Object?> get props => [jwt, refreshToken, userPermissions];
+  List<Object?> get props => [
+        email,
+        password,
+        isLogged,
+        jwt,
+        refreshToken,
+        userPermissions,
+        rememberMe
+      ];
 
   factory LoginModel.fromJson(Map<String, dynamic> json) =>
       _$LoginModelFromJson(json);

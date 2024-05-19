@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../repository/auth_repository.dart';
-import '../ui/login_page.dart';
+import '../ui/auth/login_page.dart';
 
 class Routes {
   static const String initialRoute = '/';

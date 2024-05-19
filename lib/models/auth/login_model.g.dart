@@ -12,6 +12,10 @@ LoginModel _$LoginModelFromJson(Map<String, dynamic> json) => LoginModel(
       userPermissions: (json['userPermissions'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      email: json['email'] as String? ?? '',
+      password: json['password'] as String? ?? '',
+      isLogged: json['isLogged'] as bool? ?? false,
+      rememberMe: json['rememberMe'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$LoginModelToJson(LoginModel instance) =>
@@ -19,4 +23,8 @@ Map<String, dynamic> _$LoginModelToJson(LoginModel instance) =>
       'jwt': instance.jwt,
       'refreshToken': instance.refreshToken,
       'userPermissions': instance.userPermissions,
+      'email': instance.email,
+      'password': instance.password,
+      'isLogged': instance.isLogged,
+      'rememberMe': instance.rememberMe,
     };

@@ -3,7 +3,7 @@ import 'dart:html' as html;
 import 'dart:ui';
 
 import '../../models/interfaces/i_secure_storage.dart';
-import '../../models/login_model.dart';
+import '../../models/auth/login_model.dart';
 
 ISecureStorage getSecureStorage() => WebSecureStorageService();
 

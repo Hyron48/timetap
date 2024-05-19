@@ -1,71 +1,71 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:http_interceptor/http/http.dart';
 import '../bloc/auth/auth_bloc.dart';
-import '../dio/dio_config.dart';
+import '../http/custom_interceptors.dart';
 import '../models/interfaces/i_secure_storage.dart';
-import '../models/login_model.dart';
+import '../models/auth/login_model.dart';
 import '../utils/custom_exception.dart';
 import '../utils/flavor_config.dart';
+import 'package:http/http.dart' as http;
 
 class AuthRepository {
-  static final Dio _dio = DioConfig().dio;
   static late LoginModel _loginModel;
-  static final StreamController<AuthState> authStateStreamController =
-      StreamController<AuthState>();
+  static final StreamController<BaseAuthState> authStateStreamController = StreamController<BaseAuthState>();
   final ISecureStorage secureStorage = ISecureStorage();
+  late http.Client client;
 
   LoginModel get currentLoginModel => _loginModel;
 
-  AuthRepository();
+  AuthRepository() {
+    client = InterceptedClient.build(interceptors: [CustomInterceptor()]);
+  }
 
-  Future<void> login(
-      {required String email,
-      required String password,
-      required bool rememberMeSwitch}) async {
-    Uri uri = Uri.https(FlavorConfig.instance.values.appUrl,
-        "${FlavorConfig.instance.values.apiVersion}/login");
+  Future<void> login({required String email, required String password, required bool rememberMe}) async {
+    Uri uri = Uri.parse('${FlavorConfig.instance.values.appUrl}/login');
 
     try {
-      Response<Map<String, dynamic>> response = await _dio.postUri(
+      var response = await client.post(
         uri,
-        data: {
-          'login': email,
+        body: jsonEncode({
+          'email': email,
           'password': password,
-        },
+        }),
       );
 
-      _loginModel = LoginModel.fromJson(response.data!);
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _loginModel = LoginModel.fromJson(responseBody);
 
-      _loginModel = _loginModel.copyWith(
+      _loginModel.copyWith(
         email: email,
         password: password,
-        rememberMeSwitch: rememberMeSwitch,
+        rememberMe: rememberMe,
         isLogged: true,
       );
 
-      authStateStreamController.add(AuthState.authenticated(_loginModel));
+      authStateStreamController.add(AuthenticatedAuthState(loginModel: _loginModel));
 
-      // await _saveAuthInfoOnSecureStorage(loginModel: _loginModel);
     } on SocketException catch (ex) {
       throw CustomException(
         statusCode: 0,
         message: ex.toString(),
       );
-    } on DioException catch (ex) {}
+    }
   }
 
   Future<void> loadCurrentLoginModel() async {
     try {
+      print('ok > ${await ISecureStorage().readLoginModel()}');
       _loginModel = await ISecureStorage().readLoginModel();
     } on PlatformException {
       _loginModel = LoginModel.empty;
     }
   }
 
-  Stream<AuthState> get authStateStream {
+  Stream<BaseAuthState> get authStateStream {
     return authStateStreamController.stream;
   }
 }

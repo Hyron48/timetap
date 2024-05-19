@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../models/interfaces/i_secure_storage.dart';
-import '../../models/login_model.dart';
+import '../../models/auth/login_model.dart';
 
 ISecureStorage getSecureStorage() => MobileSecureStorageService();
 
