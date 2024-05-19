@@ -1,8 +1,9 @@
 {
     "appTitle": "Time Tap",
-    "loginTitle": "Login ITA",
+    "loginTitle": "Login",
     "email": "Email",
     "password": "Password",
+    "rememberMe": "Ricordami",
     "loginButton": "Accedi",
 
     "isFieldEmpty": "Campo obbligatorio",

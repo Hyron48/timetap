@@ -1,22 +1,41 @@
 part of 'auth_bloc.dart';
 
-class AuthState extends Equatable {
-  const AuthState._({
+// Refactor based on chat_state
+
+class BaseAuthState extends Equatable {
+  final AuthStatus authStatus;
+
+  const BaseAuthState({
     required this.authStatus,
-    this.loginModel = LoginModel.empty,
   });
 
-  final AuthStatus authStatus;
+  @override
+  List<Object> get props => [];
+}
+
+class AuthenticatedAuthState extends BaseAuthState {
   final LoginModel loginModel;
 
-  const AuthState.authenticated(LoginModel loginModel) : this._(authStatus: AuthStatus.authenticated, loginModel: loginModel);
+  const AuthenticatedAuthState({
+    required this.loginModel,
+    super.authStatus = AuthStatus.authenticated,
+  });
+}
 
-  const AuthState.unauthenticated() : this._(authStatus: AuthStatus.unauthenticated);
+class UnauthenticatedAuthState extends BaseAuthState {
+  const UnauthenticatedAuthState({
+    super.authStatus = AuthStatus.unauthenticated,
+  });
+}
 
-  const AuthState.unauthorized() : this._(authStatus: AuthStatus.unauthorized);
+class UnauthorizedAuthState extends BaseAuthState {
+  const UnauthorizedAuthState({
+    super.authStatus = AuthStatus.unauthorized,
+  });
+}
 
-  const AuthState.empty() : this._(authStatus: AuthStatus.empty);
-
-  @override
-  List<Object> get props => [authStatus, loginModel];
+class EmptyAuthState extends BaseAuthState {
+  const EmptyAuthState({
+    super.authStatus = AuthStatus.empty,
+  });
 }

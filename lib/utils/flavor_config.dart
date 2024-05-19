@@ -20,10 +20,9 @@ String getFlavorName({required Flavor flavor}) {
 }
 
 class FlavorValues {
-  const FlavorValues({required this.appUrl, this.apiVersion = '/api/v1'});
+  const FlavorValues({required this.appUrl});
 
   final String appUrl;
-  final String apiVersion;
 }
 
 class FlavorConfig {
