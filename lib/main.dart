@@ -26,7 +26,6 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-
   final AuthRepository authRepository = AuthRepository();
   await authRepository.loadCurrentLoginModel();
   await ISecureStorage().setDefaultLanguage(locale: Locale('it', 'IT'));
@@ -68,18 +67,17 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
   }
 
   Future<void> localization() async {
     userLocale = await ISecureStorage().getUserLocale();
-    print('wor >  ${userLocale}');
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LocaleCubit, Locale>(
-      buildWhen: (currentLocale, newLocale) => newLocale.languageCode != AppLocalizations.of(context)?.localeName,
+      buildWhen: (currentLocale, newLocale) =>
+          newLocale.languageCode != AppLocalizations.of(context)?.localeName,
       builder: (BuildContext contextLocale, Locale locale) {
         localization();
         return MaterialApp(
@@ -88,7 +86,8 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.light,
           locale: userLocale ?? locale,
-          onGenerateRoute: (RouteSettings settings) => Routes.generateRoute(settings),
+          onGenerateRoute: (RouteSettings settings) =>
+              Routes.generateRoute(settings, context.read<AuthBloc>().isUserAlreadyLogged()),
         );
       },
     );

@@ -17,14 +17,13 @@ class LoginCubit extends Cubit<LoginState> {
               : LoginState(
                   email: authRepository.currentLoginModel.email,
                   password: authRepository.currentLoginModel.password,
-                  rememberMe: authRepository.currentLoginModel.rememberMe,
                 ),
         );
 
   Future<void> loginWithCredentials() async {
     emit(state.copyWith(status: BlocStatus.inProgress));
     try {
-      await authRepository.login(email: state.email, password: state.password, rememberMe: state.rememberMe);
+      await authRepository.login(email: state.email, password: state.password);
       emit(state.copyWith(status: BlocStatus.success));
     } on CustomException catch (e) {
       emit(

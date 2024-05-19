@@ -10,7 +10,7 @@ import '../../models/auth/login_model.dart';
 ISecureStorage getSecureStorage() => MobileSecureStorageService();
 
 class MobileSecureStorageService implements ISecureStorage {
-  final String _loginModel = 'loginModel';
+  final String _loginModel = 'login_model';
   final String _selectedLocate = 'selected_locale';
 
   FlutterSecureStorage storage = const FlutterSecureStorage();
@@ -40,6 +40,7 @@ class MobileSecureStorageService implements ISecureStorage {
   @override
   Future<bool> deleteLoginModel() async {
     try {
+      print('before destroy <  ${await storage.read(key: _loginModel)}');
       await storage.delete(key: _loginModel);
       return true;
     } on PlatformException catch (ex) {

@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:http_interceptor/http/http.dart';
-import '../bloc/auth/auth_bloc.dart';
 import '../http/custom_interceptors.dart';
 import '../models/interfaces/i_secure_storage.dart';
 import '../models/auth/login_model.dart';
@@ -14,7 +13,6 @@ import 'package:http/http.dart' as http;
 
 class AuthRepository {
   static late LoginModel _loginModel;
-  static final StreamController<BaseAuthState> authStateStreamController = StreamController<BaseAuthState>();
   final ISecureStorage secureStorage = ISecureStorage();
   late http.Client client;
 
@@ -24,7 +22,10 @@ class AuthRepository {
     client = InterceptedClient.build(interceptors: [CustomInterceptor()]);
   }
 
-  Future<void> login({required String email, required String password, required bool rememberMe}) async {
+  Future<void> login({
+    required String email,
+    required String password,
+  }) async {
     Uri uri = Uri.parse('${FlavorConfig.instance.values.appUrl}/login');
 
     try {
@@ -39,15 +40,12 @@ class AuthRepository {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       _loginModel = LoginModel.fromJson(responseBody);
 
-      _loginModel.copyWith(
+      _loginModel = _loginModel.copyWith(
         email: email,
         password: password,
-        rememberMe: rememberMe,
-        isLogged: true,
       );
 
-      authStateStreamController.add(AuthenticatedAuthState(loginModel: _loginModel));
-
+      await saveAuthInfoOnSecureStorage();
     } on SocketException catch (ex) {
       throw CustomException(
         statusCode: 0,
@@ -58,14 +56,25 @@ class AuthRepository {
 
   Future<void> loadCurrentLoginModel() async {
     try {
-      print('ok > ${await ISecureStorage().readLoginModel()}');
       _loginModel = await ISecureStorage().readLoginModel();
     } on PlatformException {
       _loginModel = LoginModel.empty;
     }
   }
 
-  Stream<BaseAuthState> get authStateStream {
-    return authStateStreamController.stream;
+  Future<void> saveAuthInfoOnSecureStorage() async {
+    try {
+      await secureStorage.saveLoginModel(loginModel: _loginModel);
+    } catch (ex) {
+      throw CustomException(
+        statusCode: 0,
+        message: ex.toString(),
+      );
+    }
+  }
+
+  Future<void> logout() async {
+    await secureStorage.deleteLoginModel();
+    _loginModel = LoginModel.empty;
   }
 }

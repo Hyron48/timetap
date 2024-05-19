@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../utils/useful_constants.dart' as constants;
+import '../utils/constants.dart' as constants;
 
 void showErrorSnackBar({required BuildContext context,
   required String message,

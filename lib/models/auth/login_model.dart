@@ -20,20 +20,12 @@ class LoginModel extends Equatable {
   @JsonKey(name: 'password', includeIfNull: false, required: false)
   final String password;
 
-  @JsonKey(name: 'isLogged', includeIfNull: false, required: false)
-  final bool isLogged;
-
-  @JsonKey(name: 'rememberMe', includeIfNull: false, required: false)
-  final bool rememberMe;
-
   const LoginModel({
     required this.jwt,
     required this.refreshToken,
     required this.userPermissions,
     this.email = '',
     this.password = '',
-    this.isLogged = false,
-    this.rememberMe = false,
   });
 
   static const empty = LoginModel(
@@ -42,16 +34,12 @@ class LoginModel extends Equatable {
     userPermissions: [],
     email: '',
     password: '',
-    isLogged: false,
-    rememberMe: false,
   );
 
-  LoginModel copyWith({String? email, String? password, bool? rememberMe, bool? isLogged}) =>
+  LoginModel copyWith({String? email, String? password, bool? isLogged}) =>
       LoginModel(
         email: email ?? this.email,
         password: password ?? this.password,
-        rememberMe: rememberMe ?? this.rememberMe,
-        isLogged: isLogged ?? this.isLogged,
         jwt: this.jwt,
         refreshToken: this.refreshToken,
         userPermissions: this.userPermissions,
@@ -65,11 +53,9 @@ class LoginModel extends Equatable {
   List<Object?> get props => [
         email,
         password,
-        isLogged,
         jwt,
         refreshToken,
         userPermissions,
-        rememberMe
       ];
 
   factory LoginModel.fromJson(Map<String, dynamic> json) =>
