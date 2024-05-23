@@ -15,7 +15,7 @@ void main() async {
     flavor: Flavor.dev,
     color: Color(0xFF6E6E6E),
     values: const FlavorValues(
-      appUrl: 'http://localhost:8080',
+      appUrl: 'https://timetap-be-c63ba43413d7.herokuapp.com',
     ),
   );
 
