@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:timetap/bloc/auth/auth_bloc.dart';
+import 'package:timetap/repository/local_auth/local_auth_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -70,6 +71,12 @@ class HomePage extends StatelessWidget {
 
                 print('Coordinates: $coordinates');
                 print('Description: $description');
+
+                final authenticated = await LocalAuthRepository.authenticate();
+
+                if (authenticated) {
+                  
+                }
               }
             }
           }
@@ -79,7 +86,6 @@ class HomePage extends StatelessWidget {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {

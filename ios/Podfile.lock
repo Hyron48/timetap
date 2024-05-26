@@ -2,6 +2,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_secure_storage (6.0.0):
     - Flutter
+  - local_auth_darwin (0.0.1):
+    - Flutter
   - nfc_manager (0.0.1):
     - Flutter
   - path_provider_foundation (0.0.1):
@@ -14,6 +16,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - local_auth_darwin (from `.symlinks/plugins/local_auth_darwin/darwin`)
   - nfc_manager (from `.symlinks/plugins/nfc_manager/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -23,6 +26,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  local_auth_darwin:
+    :path: ".symlinks/plugins/local_auth_darwin/darwin"
   nfc_manager:
     :path: ".symlinks/plugins/nfc_manager/ios"
   path_provider_foundation:
@@ -33,6 +38,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  local_auth_darwin: 4d56c90c2683319835a61274b57620df9c4520ab
   nfc_manager: d7da7cb781f7744b94df5fe9dbca904ac4a0939e
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
