@@ -58,33 +58,29 @@ class _LogInFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<LoginCubit, LoginState>(
-          listenWhen: (LoginState current, LoginState next) =>
-              current.status != next.status,
-          listener: (BuildContext context, LoginState loginState) {
-            switch (loginState.status) {
-              case BlocStatus.inProgress:
-                changeLoadingApiStatus(true);
-                break;
-              case BlocStatus.failure:
-                changeLoadingApiStatus(false);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Login fallito')),
-                );
-                break;
-              case BlocStatus.success:
-                changeLoadingApiStatus(false);
-                Navigator.of(context).pushReplacementNamed('/');
-                break;
-              default:
-                changeLoadingApiStatus(false);
-                break;
-            }
-          },
-        ),
-      ],
+    return BlocListener<LoginCubit, LoginState>(
+      listenWhen: (LoginState current, LoginState next) =>
+          current.status != next.status,
+      listener: (BuildContext context, LoginState loginState) {
+        switch (loginState.status) {
+          case BlocStatus.inProgress:
+            changeLoadingApiStatus(true);
+            break;
+          case BlocStatus.failure:
+            changeLoadingApiStatus(false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Login fallito')),
+            );
+            break;
+          case BlocStatus.success:
+            changeLoadingApiStatus(false);
+            Navigator.of(context).pushReplacementNamed('/');
+            break;
+          default:
+            changeLoadingApiStatus(false);
+            break;
+        }
+      },
       child: Form(
         key: formKey,
         child: Padding(

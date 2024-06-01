@@ -18,12 +18,12 @@ class MobileSecureStorageService implements ISecureStorage {
   @override
   Future<LoginModel> readLoginModel() async {
     try {
-      dynamic loginData = await storage.read(key: _loginModel);
+      dynamic loginData = await storage.read(key: _loginModel) ?? '';
       return loginData == null
           ? LoginModel.empty
           : LoginModel.fromJson(jsonDecode(loginData));
     } on PlatformException catch (ex) {
-      throw PlatformException(code: ex.code, message: ex.message);
+      return LoginModel.empty;
     }
   }
 

@@ -29,13 +29,10 @@ class AuthBloc extends Bloc<AuthEvent, BaseAuthState> {
     on<AuthLogoutEvent>(_onLogout);
   }
 
-  void _onLogout(AuthLogoutEvent event, Emitter<BaseAuthState> emit) async {
-    await _authRepository.logout();
-    emit(const UnauthenticatedAuthState());
-  }
-
   void _onAuthStateChanged(
-      AuthStateChanged event, Emitter<BaseAuthState> emit) {
+    AuthStateChanged event,
+    Emitter<BaseAuthState> emit,
+  ) {
     if (event.authState.authStatus == AuthStatus.authenticated) {
       emit(AuthenticatedAuthState(
           loginModel: _authRepository.currentLoginModel));
@@ -46,7 +43,15 @@ class AuthBloc extends Bloc<AuthEvent, BaseAuthState> {
     }
   }
 
+  void _onLogout(
+      AuthLogoutEvent event,
+      Emitter<BaseAuthState> emit,
+      ) async {
+    await _authRepository.logout();
+    emit(const UnauthenticatedAuthState());
+  }
   bool isUserAlreadyLogged() {
     return _authRepository.currentLoginModel.jwt != '';
   }
+
 }

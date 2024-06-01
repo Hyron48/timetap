@@ -1,8 +1,10 @@
-part of 'home_bloc.dart';
+part of 'tag_stamp_bloc.dart';
 
-abstract class HomeEvent extends Equatable {
-  const HomeEvent();
+abstract class TagStampEvent extends Equatable {
+  const TagStampEvent();
 
   @override
   List<Object> get props => [];
 }
+
+class ExecClockIn extends TagStampEvent {}

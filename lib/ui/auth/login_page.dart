@@ -32,10 +32,7 @@ class LoginPageState extends State<LoginPage> {
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)?.loginTitle ?? 'Not found'),
         ),
-        body: BlocProvider<LoginCubit>(
-          create: (_) => LoginCubit(context.read<AuthRepository>()),
-          child: LoginForm(),
-        )
+        body: LoginForm()
     );
   }
 }

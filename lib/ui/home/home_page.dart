@@ -1,11 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nfc_manager/nfc_manager.dart';
-import 'package:timetap/bloc/auth/auth_bloc.dart';
+import 'package:timetap/bloc/tag_stamp/tag_stamp_bloc.dart';
 import 'package:timetap/repository/local_auth/local_auth_repository.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:timetap/repository/tag_stamp/tag_stamp_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -29,62 +29,28 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Future<void> triggerNfcAndGeoLocalization(BuildContext context) async {
-    bool isAvailable = await NfcManager.instance.isAvailable();
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-    if (!isAvailable) {
-      return;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
     }
 
-    showNfcDialog(context);
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
 
-    NfcManager.instance.startSession(
-      onDiscovered: (NfcTag tag) async {
-        final ndef = Ndef.from(tag);
-        if (ndef == null) {
-          print('No NDEF data found on tag');
-          return;
-        }
-        final cachedMessage = ndef.cachedMessage;
-        if (cachedMessage == null) {
-          print('No cached NDEF message found');
-          return;
-        }
-
-        for (var record in cachedMessage.records) {
-          if (record.typeNameFormat == NdefTypeNameFormat.nfcWellknown) {
-            if (String.fromCharCodes(record.type) == 'U') {
-              var payload = record.payload;
-              var uri = String.fromCharCodes(payload.sublist(1));
-              if (uri.startsWith('geo:')) {
-                var geoParts = uri.substring(4).split('?');
-                var coordinates = geoParts[0];
-                var description = '';
-                if (geoParts.length > 1 && geoParts[1].startsWith('q=')) {
-                  var query = geoParts[1].substring(2);
-                  var queryParts = query.split('(');
-                  coordinates = queryParts[0];
-                  if (queryParts.length > 1) {
-                    description = queryParts[1].replaceFirst(')', '');
-                  }
-                }
-
-                print('Coordinates: $coordinates');
-                print('Description: $description');
-
-                final authenticated = await LocalAuthRepository.authenticate();
-
-                if (authenticated) {
-                  
-                }
-              }
-            }
-          }
-        }
-
-        NfcManager.instance.stopSession();
-      },
-    );
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -93,20 +59,24 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home Page'),
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          GestureDetector(
-            onTap: () => triggerNfcAndGeoLocalization(context),
-            child: Center(
-              child: SvgPicture.asset(
-                'assets/svg/add_clock_in.svg',
-                width: (MediaQuery.of(context).size.width / 2.4),
-                height: (MediaQuery.of(context).size.height / 2.4),
+      body: BlocListener<TagStampBloc, TagStampState>(
+        listener: (BuildContext context, TagStampState state) {},
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () =>
+                  BlocProvider.of<TagStampBloc>(context).add(ExecClockIn()),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/svg/add_clock_in.svg',
+                  width: (MediaQuery.of(context).size.width / 2.4),
+                  height: (MediaQuery.of(context).size.height / 2.4),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
