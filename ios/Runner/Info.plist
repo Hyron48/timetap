@@ -49,5 +49,7 @@
     <string>Necessary to clock in.</string>
     <key>NSFaceIDUsageDescription</key>
     <string>Necessary to authenticate the clock in.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open.</string>
 </dict>
 </plist>
