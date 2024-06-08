@@ -7,12 +7,12 @@ import '../utils/flavor_config.dart';
 
 class ExpiredTokenRetryPolicy extends RetryPolicy {
   @override
-  Future<bool> shouldAttemptRetryOnResponse(ResponseData response) async {
+  Future<bool> shouldAttemptRetryOnResponse(BaseResponse response) async {
     ISecureStorage secureStorageService = ISecureStorage();
     if (response.statusCode == 401) {
       final client = http.Client();
       Uri uri =
-          Uri.parse('${FlavorConfig.instance.values.appUrl}/refresh-token');
+      Uri.parse('${FlavorConfig.instance.values.appUrl}/refresh-token');
 
       LoginModel loginModel = await secureStorageService.readLoginModel();
 
@@ -49,18 +49,28 @@ class CustomInterceptor implements InterceptorContract {
   CustomInterceptor({this.contentType = 'application/json'});
 
   @override
-  Future<RequestData> interceptRequest({required RequestData data}) async {
-    data.headers['Content-Type'] = contentType;
+  Future<BaseRequest> interceptRequest({required BaseRequest request}) async {
+    request.headers['Content-Type'] = contentType;
 
     LoginModel loginModel = await secureStorageService.readLoginModel();
     if (loginModel.isNotEmpty) {
-      data.headers['Authorization'] = "Bearer ${loginModel.jwt}";
+      request.headers['Authorization'] = "Bearer ${loginModel.jwt}";
     }
-    return data;
+    return request;
   }
 
   @override
-  Future<ResponseData> interceptResponse({required ResponseData data}) async {
-    return data;
+  Future<BaseResponse> interceptResponse({required BaseResponse response}) async {
+    return response;
+  }
+
+  @override
+  Future<bool> shouldInterceptRequest() {
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> shouldInterceptResponse() {
+    return Future.value(true);
   }
 }

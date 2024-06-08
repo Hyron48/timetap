@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:timetap/bloc/login/login_cubit.dart';
-import 'package:timetap/repository/auth_repository.dart';
 import 'package:timetap/ui/auth/login_form.dart';
 
 class LoginPage extends StatefulWidget {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:timetap/models/tag-stamp/address_model.dart';
 import 'package:timetap/ui/shared/generic_info_row.dart';
 import 'package:timetap/utils/constants.dart';
@@ -69,7 +71,7 @@ class TagStampDetailState extends State<TagStampDetail> {
 
     DateTime localDate = parsedDate.toLocal();
 
-    DateFormat formatter = DateFormat('dd-MM-yy HH:mm:ss');
+    DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm:ss');
     return formatter.format(localDate);
   }
 
@@ -116,6 +118,43 @@ class TagStampDetailState extends State<TagStampDetail> {
     return listToView;
   }
 
+  FlutterMap getMap() {
+    LatLng point =
+        LatLng(widget.tagStamp.coordinates[0], widget.tagStamp.coordinates[1]);
+
+    return FlutterMap(
+      options: MapOptions(
+        initialCenter: point,
+        initialZoom: 11,
+        interactionOptions:
+            const InteractionOptions(flags: ~InteractiveFlag.rotate),
+      ),
+      children: [
+        openStreetMapLayer,
+        MarkerLayer(
+          markers: [
+            Marker(
+              point: point,
+              width: 50,
+              height: 50,
+              alignment: Alignment.topCenter,
+              child: Icon(
+                Icons.location_pin,
+                size: 50,
+                color: colorStatusRed,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  TileLayer get openStreetMapLayer => TileLayer(
+        urlTemplate: 'http://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,7 +170,15 @@ class TagStampDetailState extends State<TagStampDetail> {
       body: Padding(
         padding: EdgeInsets.all(32.0),
         child: Column(
-          children: getTagInfoRows(context),
+          children: [
+            ...getTagInfoRows(context),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0, 25.0, 0, 50.0),
+                child: getMap(),
+              ),
+            ),
+          ],
         ),
       ),
     );

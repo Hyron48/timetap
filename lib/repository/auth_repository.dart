@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:http_interceptor/http/http.dart';
+import 'package:http_interceptor/http/intercepted_client.dart';
 import '../http/custom_interceptors.dart';
 import '../models/interfaces/i_secure_storage.dart';
 import '../models/auth/login_model.dart';
