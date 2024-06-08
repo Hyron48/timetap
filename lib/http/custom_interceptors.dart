@@ -62,7 +62,8 @@ class CustomInterceptor implements InterceptorContract {
 
   @override
   Future<BaseResponse> interceptResponse({required BaseResponse response}) async {
-    if (response.statusCode == 200) {
+
+    if ((response.statusCode == 200) || (response.statusCode == 201)) {
       return response;
     }
     throw CustomException(statusCode: response.statusCode, message: '');
