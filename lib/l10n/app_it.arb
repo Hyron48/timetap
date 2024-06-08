@@ -2,12 +2,17 @@
     "appTitle": "Time Tap",
     "menuHome": "Tap",
     "menuHistory": "History dei tap",
+    "menuLogout": "Logout",
+
+    "generalErrorMessage": "Qualcosa è andato storto. Riprova",
 
     "loginTitle": "Login",
     "email": "Email",
     "password": "Password",
     "rememberMe": "Ricordami",
     "loginButton": "Accedi",
+    "notRegisteredMessage": "Non hai un account? Registrati ",
+    "thereMessage": "qui",
 
     "isFieldEmpty": "Campo obbligatorio",
     "fieldNotValid": "Campo non valido",
@@ -21,7 +26,6 @@
     "tapSuccessHeader": "Tap completato",
     "tapSuccessMessage": "Sarai reindirizzato alla history dei tuoi tap.",
     "tapErrorHeader": "Errore",
-    "tapErrorMessage": "Qualcosa è andato storto. Riprova",
 
     "tagHistoryTitle": "History",
     "tagDetailTimeLabel": "Orario timbro: ",

@@ -2,12 +2,17 @@
   "appTitle": "Time Tap",
   "menuHome": "Tap",
   "menuHistory": "History of taps",
+  "menuLogout": "Logout",
+
+  "generalErrorMessage": "Something went wrong. Try again",
 
   "loginTitle": "Login",
   "email": "Email",
   "password": "Password",
   "rememberMe": "Remember Me",
   "loginButton": "Login",
+  "notRegisteredMessage": "Do not have an account? Register ",
+  "thereMessage": "qui",
 
   "isFieldEmpty": "Required field.",
   "fieldNotValid": "Field not valid.",
@@ -21,7 +26,6 @@
   "tapSuccessHeader": "Tap completed",
   "tapSuccessMessage": "You will be redirected to your tap history.",
   "tapErrorHeader": "Error",
-  "tapErrorMessage": "Something went wrong. Try again",
 
   "tagHistoryTitle": "History",
   "tagDetailTimeLabel": "Time clock in: ",

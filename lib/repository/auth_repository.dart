@@ -46,7 +46,7 @@ class AuthRepository {
       );
 
       await saveAuthInfoOnSecureStorage();
-    } on SocketException catch (ex) {
+    } catch (ex) {
       throw CustomException(
         statusCode: 0,
         message: ex.toString(),

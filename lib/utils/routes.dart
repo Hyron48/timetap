@@ -4,15 +4,14 @@ import 'package:timetap/bloc/tag_history/tag_history_cubit.dart';
 import 'package:timetap/ui/home/home_page.dart';
 import 'package:timetap/ui/tag_history/tag_stamp_detail.dart';
 import 'package:timetap/ui/tag_history/tag_stamp_history.dart';
-import '../bloc/login/login_cubit.dart';
 import '../bloc/tag_stamp/tag_stamp_bloc.dart';
 import '../models/tag-stamp/tag_stamp_model.dart';
-import '../repository/auth_repository.dart';
 import '../repository/tag_stamp/tag_stamp_repository.dart';
 import '../ui/auth/login_page.dart';
 
 class Routes {
   static const String initialRoute = '/';
+  static const String registerRoute = '/register';
   static const String tagHistoryRoute = '/tap_history';
   static const String tagStampDetailRoute = '/tap_history/detail';
 
@@ -44,10 +43,7 @@ class Routes {
             child: HomePage(),
           );
         } else {
-          page = BlocProvider<LoginCubit>(
-            create: (context) => LoginCubit(context.read<AuthRepository>()),
-            child: LoginPage(),
-          );
+          page = LoginPage();
         }
         break;
     }

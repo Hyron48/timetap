@@ -42,9 +42,12 @@ class TagStampDetailState extends State<TagStampDetail> {
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
         setState(() {
-          var city = place.locality ?? '';
+          String city = place.locality ?? '';
+          if (city == '' && place.subAdministrativeArea != '') {
+            city = place.subAdministrativeArea!;
+          }
           if (place.postalCode != null) {
-            city += ', ${place.postalCode}';
+            city += '${city != '' ? ',' : ''} ${place.postalCode}';
           }
           address = AddressModel(
             street: place.street ?? '',

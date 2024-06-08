@@ -40,7 +40,6 @@ class MobileSecureStorageService implements ISecureStorage {
   @override
   Future<bool> deleteLoginModel() async {
     try {
-      print('before destroy <  ${await storage.read(key: _loginModel)}');
       await storage.delete(key: _loginModel);
       return true;
     } on PlatformException catch (ex) {

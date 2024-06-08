@@ -89,7 +89,9 @@ class _MyAppState extends State<MyApp> {
           themeMode: ThemeMode.light,
           locale: userLocale ?? locale,
           onGenerateRoute: (RouteSettings settings) => Routes.generateRoute(
-              settings, context.read<AuthBloc>().isUserAlreadyLogged()),
+            settings,
+            context.read<AuthBloc>().isUserAlreadyLogged(),
+          ),
         );
       },
     );

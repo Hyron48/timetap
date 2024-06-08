@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http_interceptor/http_interceptor.dart';
+import 'package:timetap/utils/custom_exception.dart';
 import '../models/auth/login_model.dart';
 import '../models/interfaces/i_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -61,7 +62,10 @@ class CustomInterceptor implements InterceptorContract {
 
   @override
   Future<BaseResponse> interceptResponse({required BaseResponse response}) async {
-    return response;
+    if (response.statusCode == 200) {
+      return response;
+    }
+    throw CustomException(statusCode: response.statusCode, message: '');
   }
 
   @override

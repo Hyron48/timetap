@@ -97,7 +97,7 @@ class HomePage extends StatelessWidget {
               color: black,
             );
             info.bodyMessage = Text(
-              AppLocalizations.of(context)?.tapErrorMessage ?? 'Not Found',
+              AppLocalizations.of(context)?.generalErrorMessage ?? 'Not Found',
             );
             info.btn = ElevatedButton(
               onPressed: () {
