@@ -1,5 +1,8 @@
 {
   "appTitle": "Time Tap",
+  "menuHome": "Tap",
+  "menuHistory": "History of taps",
+
   "loginTitle": "Login",
   "email": "Email",
   "password": "Password",
@@ -8,5 +11,23 @@
 
   "isFieldEmpty": "Required field.",
   "fieldNotValid": "Field not valid.",
-  "passwordNotValid": "The password must be at least eight characters, at least one letter and one number."
+  "passwordNotValid": "The password must be at least eight characters, at least one letter and one number.",
+
+  "homeHeader": "Tap to stamp",
+  "readNFCHeader": "Add a new tap",
+  "readNFCMessage": "Bring your phone close to the NFC.",
+  "verifyPhaseHeader": "By clocking in",
+  "verifyPhaseMessage": "Validation of information",
+  "tapSuccessHeader": "Tap completed",
+  "tapSuccessMessage": "You will be redirected to your tap history.",
+  "tapErrorHeader": "Error",
+  "tapErrorMessage": "Something went wrong. Try again",
+
+  "tagHistoryTitle": "History",
+  "tagDetailTimeLabel": "Time clock in: ",
+  "tagDetailAddress": "Address: ",
+  "tagDetailCity": "City: ",
+  "tagDetailCounty": "County: ",
+  "tagDetailCountry": "Country: ",
+  "tagDetailCoords": "Coordinates: "
 }

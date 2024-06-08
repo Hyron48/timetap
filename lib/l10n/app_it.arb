@@ -1,5 +1,8 @@
 {
     "appTitle": "Time Tap",
+    "menuHome": "Tap",
+    "menuHistory": "History dei tap",
+
     "loginTitle": "Login",
     "email": "Email",
     "password": "Password",
@@ -8,5 +11,23 @@
 
     "isFieldEmpty": "Campo obbligatorio",
     "fieldNotValid": "Campo non valido",
-    "passwordNotValid": "La password deve essere minimo di otto caratteri, almeno una lettera e un numero."
+    "passwordNotValid": "La password deve essere minimo di otto caratteri, almeno una lettera e un numero.",
+
+    "homeHeader": "Tap per timbrare",
+    "readNFCHeader": "Aggiungi un nuovo tap",
+    "readNFCMessage": "Avvicina il telefono all'NFC.",
+    "verifyPhaseHeader": "Timbrando il cartellino",
+    "verifyPhaseMessage": "Validazione delle informazioni",
+    "tapSuccessHeader": "Tap completato",
+    "tapSuccessMessage": "Sarai reindirizzato alla history dei tuoi tap.",
+    "tapErrorHeader": "Errore",
+    "tapErrorMessage": "Qualcosa è andato storto. Riprova",
+
+    "tagHistoryTitle": "History",
+    "tagDetailTimeLabel": "Orario timbro: ",
+    "tagDetailAddress": "Indirizzo: ",
+    "tagDetailCity": "Città: ",
+    "tagDetailCounty": "Regione: ",
+    "tagDetailCountry": "Stato: ",
+    "tagDetailCoords": "Coordinate: "
 }

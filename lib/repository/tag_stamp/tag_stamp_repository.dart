@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:http_interceptor/http/intercepted_client.dart';
@@ -13,7 +14,7 @@ class TagStampRepository {
   static late http.Client client;
 
   TagStampRepository() {
-    client = InterceptedClient.build(interceptors: [CustomInterceptor()]);
+    client = InterceptedClient.build(interceptors: [CustomInterceptor()], retryPolicy: ExpiredTokenRetryPolicy());
   }
 
   Future<bool> addNewTagStamp({
@@ -26,7 +27,7 @@ class TagStampRepository {
       var response = await client.post(
         uri,
         body: jsonEncode({
-            'positionLabel': label,
+            'positionLabel': label.replaceAll('+', ' '),
             'coordinates': coordinates,
           }),
       );
@@ -34,7 +35,23 @@ class TagStampRepository {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final tagStamp = TagStampModel.fromJson(responseBody);
       return tagStamp.id != '';
-    } on SocketException catch (ex) {
+    } catch (ex) {
+      throw CustomException(
+        statusCode: 0,
+        message: ex.toString(),
+      );
+    }
+  }
+
+  Future<List<TagStampModel>> getAllTagStamp() async {
+    Uri uri = Uri.parse('${FlavorConfig.instance.values.appUrl}/tag-history');
+
+    try {
+      var response = await client.get(uri);
+      final List<dynamic> responseBody = jsonDecode(response.body);
+      final List<TagStampModel> parsedList = responseBody.map((tagStamp) => TagStampModel.fromJson(tagStamp)).toList();
+      return parsedList;
+    } catch (ex) {
       throw CustomException(
         statusCode: 0,
         message: ex.toString(),

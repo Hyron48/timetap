@@ -51,5 +51,11 @@
     <string>Necessary to authenticate the clock in.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>This app needs access to location when open.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to show your position on the map</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need your location to show your position on the map</string>
+    <key>NSLocationUsageDescription</key>
+    <string>We need your location to show your position on the map</string>
 </dict>
 </plist>
