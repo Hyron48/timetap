@@ -1,50 +1,80 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
-import 'package:http_interceptor/http/interceptor_contract.dart';
-import 'package:http_interceptor/models/request_data.dart';
-import 'package:http_interceptor/models/response_data.dart';
-import 'package:timetap/utils/enum.dart';
+import 'dart:convert';
+import 'package:http_interceptor/http_interceptor.dart';
+import 'package:timetap/utils/custom_exception.dart';
+import '../models/auth/login_model.dart';
 import '../models/interfaces/i_secure_storage.dart';
 import 'package:http/http.dart' as http;
-
 import '../utils/flavor_config.dart';
 
+class ExpiredTokenRetryPolicy extends RetryPolicy {
+  @override
+  Future<bool> shouldAttemptRetryOnResponse(BaseResponse response) async {
+    ISecureStorage secureStorageService = ISecureStorage();
+    if (response.statusCode == 401) {
+      final client = http.Client();
+      Uri uri =
+      Uri.parse('${FlavorConfig.instance.values.appUrl}/refresh-token');
+
+      LoginModel loginModel = await secureStorageService.readLoginModel();
+
+      var response = await client.post(
+        uri,
+        body: jsonEncode({
+          'refreshToken': loginModel.refreshToken,
+        }),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        final validLoginModel = LoginModel(
+          jwt: responseBody['jwt'],
+          refreshToken: loginModel.refreshToken,
+          userPermissions: loginModel.userPermissions,
+          email: loginModel.email,
+          password: loginModel.password,
+        );
+
+        await secureStorageService.saveLoginModel(loginModel: validLoginModel);
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
 class CustomInterceptor implements InterceptorContract {
-	ISecureStorage secureStorageService = ISecureStorage();
-	final String contentType;
+  ISecureStorage secureStorageService = ISecureStorage();
+  final String contentType;
 
-	CustomInterceptor({this.contentType = 'application/json'});
+  CustomInterceptor({this.contentType = 'application/json'});
 
-	@override
-	Future<RequestData> interceptRequest({required RequestData data}) async {
-		data.headers['Content-Type'] = contentType;
-		return data;
-	}
+  @override
+  Future<BaseRequest> interceptRequest({required BaseRequest request}) async {
+    request.headers['Content-Type'] = contentType;
 
-	@override
-	Future<ResponseData> interceptResponse({required ResponseData data}) async {
-		return data;
-	}
-}
+    LoginModel loginModel = await secureStorageService.readLoginModel();
+    if (loginModel.isNotEmpty) {
+      request.headers['Authorization'] = "Bearer ${loginModel.jwt}";
+    }
+    return request;
+  }
 
-class DefaultInterceptor {
-	Future<http.Response> intercept(http.Response response) async {
-		if (kDebugMode) print('RESPONSE[${response.statusCode}] =>  ${DateTime.now()} PATH: ${response.request?.url} | DATA => ${response.body}');
-		return response;
-	}
-}
+  @override
+  Future<BaseResponse> interceptResponse({required BaseResponse response}) async {
+    if (response.statusCode == 200) {
+      return response;
+    }
+    throw CustomException(statusCode: response.statusCode, message: '');
+  }
 
-class CheckConnectionInterceptor {
-	Future<http.Request> intercept(http.BaseRequest request) async {
-		try {
-			final result = await InternetAddress.lookup(FlavorConfig.instance.values.appUrl);
-			if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-				return request as http.Request;
-			}
-		} on SocketException catch (ex) {
-			throw http.ClientException(ex.message);
-		}
-		return request as http.Request;
-	}
+  @override
+  Future<bool> shouldInterceptRequest() {
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> shouldInterceptResponse() {
+    return Future.value(true);
+  }
 }

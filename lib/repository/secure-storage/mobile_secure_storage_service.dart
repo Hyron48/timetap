@@ -18,12 +18,12 @@ class MobileSecureStorageService implements ISecureStorage {
   @override
   Future<LoginModel> readLoginModel() async {
     try {
-      dynamic loginData = await storage.read(key: _loginModel);
-      return loginData == null
+      dynamic loginData = await storage.read(key: _loginModel) ?? "";
+      return loginData == ""
           ? LoginModel.empty
           : LoginModel.fromJson(jsonDecode(loginData));
     } on PlatformException catch (ex) {
-      throw PlatformException(code: ex.code, message: ex.message);
+      return LoginModel.empty;
     }
   }
 
@@ -40,7 +40,6 @@ class MobileSecureStorageService implements ISecureStorage {
   @override
   Future<bool> deleteLoginModel() async {
     try {
-      print('before destroy <  ${await storage.read(key: _loginModel)}');
       await storage.delete(key: _loginModel);
       return true;
     } on PlatformException catch (ex) {

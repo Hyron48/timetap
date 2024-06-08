@@ -1,6 +1,7 @@
 enum AuthStatus {
   empty,
   authenticated,
+  inProgress,
   unauthenticated,
   unauthorized
 }
@@ -8,14 +9,4 @@ enum AuthStatus {
 enum ContentType {
   applicationJson,
   multipart
-}
-
-enum BlocStatus {
-  empty,
-  inProgress,
-  success,
-  failure,
-  failureConsole,
-  pagination,
-  search
 }

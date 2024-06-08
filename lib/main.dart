@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timetap/bloc/auth/auth_bloc.dart';
 import 'package:timetap/repository/auth_repository.dart';
+import 'package:timetap/repository/tag_stamp/tag_stamp_repository.dart';
 import 'package:timetap/utils/flavor_config.dart';
 import 'package:timetap/utils/routes.dart';
 import 'bloc/locale_cubit.dart';
 import 'bloc/observer.dart';
+import 'bloc/tag_stamp/tag_stamp_bloc.dart';
 import 'models/interfaces/i_secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,7 +17,7 @@ void main() async {
     flavor: Flavor.dev,
     color: Color(0xFF6E6E6E),
     values: const FlavorValues(
-      appUrl: 'http://localhost:8080',
+      appUrl: 'https://timetap-be-c63ba43413d7.herokuapp.com',
     ),
   );
 
@@ -86,8 +88,10 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.light,
           locale: userLocale ?? locale,
-          onGenerateRoute: (RouteSettings settings) =>
-              Routes.generateRoute(settings, context.read<AuthBloc>().isUserAlreadyLogged()),
+          onGenerateRoute: (RouteSettings settings) => Routes.generateRoute(
+            settings,
+            context.read<AuthBloc>().isUserAlreadyLogged(),
+          ),
         );
       },
     );

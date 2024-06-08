@@ -1,7 +1,5 @@
 part of 'auth_bloc.dart';
 
-// Refactor based on chat_state
-
 class BaseAuthState extends Equatable {
   final AuthStatus authStatus;
 
@@ -28,14 +26,14 @@ class UnauthenticatedAuthState extends BaseAuthState {
   });
 }
 
-class UnauthorizedAuthState extends BaseAuthState {
-  const UnauthorizedAuthState({
-    super.authStatus = AuthStatus.unauthorized,
-  });
-}
-
 class EmptyAuthState extends BaseAuthState {
   const EmptyAuthState({
     super.authStatus = AuthStatus.empty,
+  });
+}
+
+class InProgressAuthenticationState extends BaseAuthState {
+  const InProgressAuthenticationState({
+    super.authStatus = AuthStatus.inProgress,
   });
 }
