@@ -17,9 +17,9 @@
     "password": "Password",
     "confirmPassword": "Conferma Password",
     "rememberMe": "Ricordami",
-    "notRegisteredMessage": "Non hai un account? Registrati ",
-    "alreadyRegisteredMessage": "Hai già un account? ",
-    "thereMessage": "qui",
+    "notRegisteredMessage": "Non hai un account?",
+    "alreadyRegisteredMessage": "Hai già un account?",
+    "signup": "Registrati",
     "signIn": "Accedi",
 
     "isFieldEmpty": "Campo obbligatorio",

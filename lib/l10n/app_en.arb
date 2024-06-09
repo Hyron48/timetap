@@ -17,9 +17,9 @@
   "password": "Password",
   "confirmPassword": "Confirm Password",
   "rememberMe": "Remember Me",
-  "notRegisteredMessage": "Do not have an account? Register ",
+  "notRegisteredMessage": "Do not have an account?",
   "alreadyRegisteredMessage": "Do you already have an account? ",
-  "thereMessage": "qui",
+  "signup": "Register",
   "signIn": "Log in",
 
   "isFieldEmpty": "Required field.",
