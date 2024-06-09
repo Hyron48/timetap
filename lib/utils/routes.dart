@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timetap/bloc/tag_history/tag_history_cubit.dart';
+import 'package:timetap/ui/auth/register_page.dart';
 import 'package:timetap/ui/home/home_page.dart';
 import 'package:timetap/ui/tag_history/tag_stamp_detail.dart';
 import 'package:timetap/ui/tag_history/tag_stamp_history.dart';
@@ -33,6 +34,8 @@ class Routes {
           ),
           child: TagStampHistory(),
         );
+      case registerRoute:
+        page = RegisterPage();
       case initialRoute:
       default:
         if (isUserAuthorized) {

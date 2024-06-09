@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timetap/bloc/auth/auth_bloc.dart';
-import 'package:timetap/repository/auth_repository.dart';
+import 'package:timetap/repository/auth/auth_repository.dart';
 import 'package:timetap/repository/tag_stamp/tag_stamp_repository.dart';
 import 'package:timetap/utils/flavor_config.dart';
 import 'package:timetap/utils/routes.dart';
@@ -73,13 +73,15 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> localization() async {
     userLocale = await ISecureStorage().getUserLocale();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LocaleCubit, Locale>(
       buildWhen: (currentLocale, newLocale) =>
-          newLocale.languageCode != AppLocalizations.of(context)?.localeName,
+      newLocale.languageCode !=
+          AppLocalizations.of(context)?.localeName,
       builder: (BuildContext contextLocale, Locale locale) {
         localization();
         return MaterialApp(

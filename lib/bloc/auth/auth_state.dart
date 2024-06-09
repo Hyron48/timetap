@@ -37,3 +37,17 @@ class InProgressAuthenticationState extends BaseAuthState {
     super.authStatus = AuthStatus.inProgress,
   });
 }
+
+class RegistrationUserSuccessState extends BaseAuthState {
+  final String email;
+  const RegistrationUserSuccessState({
+    super.authStatus = AuthStatus.authenticated,
+    required this.email,
+  });
+}
+
+class RegistrationUserErrorState extends BaseAuthState {
+  const RegistrationUserErrorState({
+    super.authStatus = AuthStatus.unauthenticated,
+  });
+}

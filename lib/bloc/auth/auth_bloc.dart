@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:timetap/repository/auth_repository.dart';
+import 'package:timetap/models/auth/registration_model.dart';
+import 'package:timetap/repository/auth/auth_repository.dart';
 import '../../models/auth/login_model.dart';
 import '../../utils/custom_exception.dart';
 import '../../utils/enum.dart';
@@ -24,12 +25,26 @@ class AuthBloc extends Bloc<AuthEvent, BaseAuthState> {
     required AuthRepository authRepository,
   })  : _authRepository = authRepository,
         super(_determineInitialState(authRepository)) {
-    on<AuthLoginState>(_loginWithCredentials);
+    on<AuthRegisterEvent>(_registerUser);
+    on<AuthLoginEvent>(_loginWithCredentials);
     on<AuthLogoutEvent>(_onLogout);
   }
 
+  Future<void> _registerUser(
+      AuthRegisterEvent event,
+      Emitter<BaseAuthState> emit,
+      ) async {
+    emit(const InProgressAuthenticationState());
+    try {
+      var apiSuccess = await _authRepository.register(registrationModel: event.registrationModel);
+      emit(apiSuccess ? RegistrationUserSuccessState(email: event.registrationModel.email) : RegistrationUserErrorState());
+    } on CustomException catch (e) {
+      emit(const RegistrationUserErrorState());
+    }
+  }
+
   Future<void> _loginWithCredentials(
-    AuthLoginState event,
+    AuthLoginEvent event,
     Emitter<BaseAuthState> emit,
   ) async {
     emit(const InProgressAuthenticationState());
@@ -52,5 +67,9 @@ class AuthBloc extends Bloc<AuthEvent, BaseAuthState> {
 
   bool isUserAlreadyLogged() {
     return _authRepository.currentLoginModel.jwt != '';
+  }
+
+  String getUserEmail() {
+    return _authRepository.currentLoginModel.email;
   }
 }

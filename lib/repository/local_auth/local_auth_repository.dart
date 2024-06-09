@@ -13,7 +13,6 @@ class LocalAuthRepository {
       if (!await canAuthenticate()) {
         return false;
       }
-
       return await _auth.authenticate(
         localizedReason: 'Use Face ID to authenticate',
         options: const AuthenticationOptions(

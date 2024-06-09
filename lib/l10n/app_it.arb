@@ -6,17 +6,26 @@
 
     "generalErrorMessage": "Qualcosa è andato storto. Riprova",
 
+    "registrationTitle": "Registrazione",
+    "registrationButton": "Registrati",
     "loginTitle": "Login",
+    "loginButton": "Accedi",
+
+    "firstName": "Nome",
+    "lastName": "Cognome",
     "email": "Email",
     "password": "Password",
+    "confirmPassword": "Conferma Password",
     "rememberMe": "Ricordami",
-    "loginButton": "Accedi",
     "notRegisteredMessage": "Non hai un account? Registrati ",
+    "alreadyRegisteredMessage": "Hai già un account? ",
     "thereMessage": "qui",
+    "signIn": "Accedi",
 
     "isFieldEmpty": "Campo obbligatorio",
     "fieldNotValid": "Campo non valido",
     "passwordNotValid": "La password deve essere minimo di otto caratteri, almeno una lettera e un numero.",
+    "passwordNotMatch": "Le password non coincidono",
 
     "homeHeader": "Tap per timbrare",
     "readNFCHeader": "Aggiungi un nuovo tap",

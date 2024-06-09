@@ -4,11 +4,12 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
-import '../http/custom_interceptors.dart';
-import '../models/interfaces/i_secure_storage.dart';
-import '../models/auth/login_model.dart';
-import '../utils/custom_exception.dart';
-import '../utils/flavor_config.dart';
+import '../../http/custom_interceptors.dart';
+import '../../models/auth/registration_model.dart';
+import '../../models/interfaces/i_secure_storage.dart';
+import '../../models/auth/login_model.dart';
+import '../../utils/custom_exception.dart';
+import '../../utils/flavor_config.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepository {
@@ -22,12 +23,25 @@ class AuthRepository {
     client = InterceptedClient.build(interceptors: [CustomInterceptor()]);
   }
 
+  Future<bool> register({required RegistrationModel registrationModel}) async {
+    Uri uri = Uri.parse('${FlavorConfig.instance.values.appUrl}/register-user');
+    try {
+      var response = await client.post(uri, body: jsonEncode(registrationModel));
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      return (responseBody['verified']);
+    } catch (ex) {
+      throw CustomException(
+        statusCode: 0,
+        message: ex.toString(),
+      );
+    }
+  }
+
   Future<void> login({
     required String email,
     required String password,
   }) async {
     Uri uri = Uri.parse('${FlavorConfig.instance.values.appUrl}/login');
-
     try {
       var response = await client.post(
         uri,
@@ -36,10 +50,8 @@ class AuthRepository {
           'password': password,
         }),
       );
-
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       _loginModel = LoginModel.fromJson(responseBody);
-
       _loginModel = _loginModel.copyWith(
         email: email,
         password: password,
