@@ -4,6 +4,8 @@ import 'package:timetap/bloc/auth/auth_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:timetap/utils/routes.dart';
 
+import 'language_dropdown.dart';
+
 class NavigatorDrawer extends StatelessWidget {
   const NavigatorDrawer({super.key});
 
@@ -27,6 +29,12 @@ class NavigatorDrawer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
+                  Row(
+                    children: [
+                      Text(context.read<AuthBloc>().getUserEmail()),
+                      LanguageDropdown(),
+                    ],
+                  ),
                   ListTile(
                     leading: const Icon(
                       Icons.home_outlined,

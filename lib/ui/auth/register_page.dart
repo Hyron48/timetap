@@ -7,6 +7,7 @@ import 'package:timetap/models/auth/registration_model.dart';
 import '../../utils/constants.dart';
 import '../../utils/regex.dart';
 import '../../utils/routes.dart';
+import '../shared/language_dropdown.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -59,6 +60,9 @@ class RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         title: Text(
             AppLocalizations.of(context)?.registrationTitle ?? 'Not found'),
+        actions: [
+          LanguageDropdown(),
+        ],
       ),
       body: BlocListener<AuthBloc, BaseAuthState>(
         listener: (BuildContext context, BaseAuthState registrationState) {

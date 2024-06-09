@@ -73,13 +73,15 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> localization() async {
     userLocale = await ISecureStorage().getUserLocale();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LocaleCubit, Locale>(
       buildWhen: (currentLocale, newLocale) =>
-          newLocale.languageCode != AppLocalizations.of(context)?.localeName,
+      newLocale.languageCode !=
+          AppLocalizations.of(context)?.localeName,
       builder: (BuildContext contextLocale, Locale locale) {
         localization();
         return MaterialApp(

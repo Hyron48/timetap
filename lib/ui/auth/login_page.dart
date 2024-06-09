@@ -6,6 +6,7 @@ import 'package:timetap/utils/constants.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../utils/regex.dart';
 import '../../utils/routes.dart';
+import '../shared/language_dropdown.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -54,6 +55,9 @@ class LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)?.loginTitle ?? 'Not found'),
+        actions: [
+          LanguageDropdown(),
+        ],
       ),
       body: BlocListener<AuthBloc, BaseAuthState>(
         listener: (BuildContext context, BaseAuthState loginState) {

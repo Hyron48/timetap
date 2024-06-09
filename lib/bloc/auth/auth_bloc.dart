@@ -68,4 +68,8 @@ class AuthBloc extends Bloc<AuthEvent, BaseAuthState> {
   bool isUserAlreadyLogged() {
     return _authRepository.currentLoginModel.jwt != '';
   }
+
+  String getUserEmail() {
+    return _authRepository.currentLoginModel.email;
+  }
 }
