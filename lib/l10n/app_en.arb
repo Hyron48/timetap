@@ -35,6 +35,9 @@
   "tapSuccessHeader": "Tap completed",
   "tapSuccessMessage": "You will be redirected to your tap history.",
   "tapErrorHeader": "Error",
+  "sensorDisabledTitle": "Sensor problem",
+  "sensorDisabledMessage": "To continue, please activate NFC and GPS.",
+  "retryBtn": "Retry",
 
   "tagHistoryTitle": "History",
   "tagDetailTimeLabel": "Time clock in: ",

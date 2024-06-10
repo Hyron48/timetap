@@ -8,3 +8,5 @@ abstract class TagStampEvent extends Equatable {
 }
 
 class ExecClockIn extends TagStampEvent {}
+
+class CancelClockIn extends TagStampEvent {}

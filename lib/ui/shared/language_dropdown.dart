@@ -33,8 +33,8 @@ class LanguageDropdown extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5),
                         child: SvgPicture.asset(
                           locale.languageCode == 'it'
-                              ? 'assets/svg/it-flag.svg'
-                              : 'assets/svg/us-flag.svg',
+                              ? 'assets/svg/it_flag.svg'
+                              : 'assets/svg/us_flag.svg',
                           width: 25,
                           height: 25,
                         ),
@@ -59,8 +59,8 @@ class LanguageDropdown extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                       child: SvgPicture.asset(
                         locale.languageCode == 'it'
-                            ? 'assets/svg/it-flag.svg'
-                            : 'assets/svg/us-flag.svg',
+                            ? 'assets/svg/it_flag.svg'
+                            : 'assets/svg/us_flag.svg',
                         width: 25,
                         height: 25,
                       ),

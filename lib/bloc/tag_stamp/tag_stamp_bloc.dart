@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,43 +14,58 @@ part 'tag_stamp_state.dart';
 class TagStampBloc extends Bloc<TagStampEvent, TagStampState> {
   final TagStampRepository _tagStampRepository;
   final toleranceMeter = 10;
+  bool _isCancelled = false;
 
   TagStampBloc({
     required TagStampRepository tagStampRepository,
   })  : _tagStampRepository = tagStampRepository,
         super(ClockInInitialState()) {
     on<ExecClockIn>(_execClockIn);
-
+    on<CancelClockIn>(_cancelClockIn);
   }
 
   Future<void> _execClockIn(
-    ExecClockIn event,
-    Emitter<TagStampState> emit,
-  ) async {
+      ExecClockIn event,
+      Emitter<TagStampState> emit,
+      ) async {
+    _isCancelled = false;
+
     bool isAvailable = await NfcManager.instance.isAvailable();
     if (!isAvailable) {
-      emit(const ClockInErrorState());
+      emit(NoSensorActiveState());
       return;
     }
-    emit(const ClockingInState());
+    emit(ClockingInState());
     Completer<void> completer = Completer<void>();
     await NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      emit(const ReadNfcState());
-      emit(await _onDiscoveredTag(tag) ? const ClockInSuccessState() : const ClockInErrorState());
+      if (_isCancelled) {
+        emit(ClockInErrorState());
+        completer.complete();
+        return;
+      }
+      emit(ReadNfcState());
+      emit(await _onDiscoveredTag(tag) ? ClockInSuccessState() : ClockInErrorState());
       completer.complete();
     });
     await completer.future;
   }
 
+  void _cancelClockIn(CancelClockIn event, Emitter<TagStampState> emit) {
+    _isCancelled = true;
+    NfcManager.instance.stopSession();
+    emit(ClockInCancelledState());
+  }
+
   Future<bool> _onDiscoveredTag(NfcTag tag) async {
+    if (_isCancelled) return false;
+
     final ndef = Ndef.from(tag);
     if (ndef == null) {
       print('No NDEF data found on tag');
       return false;
     }
     final record = ndef.cachedMessage?.records.firstOrNull;
-    if ((record != null) &&
-        record.typeNameFormat == NdefTypeNameFormat.nfcWellknown) {
+    if ((record != null) && record.typeNameFormat == NdefTypeNameFormat.nfcWellknown) {
       if (String.fromCharCodes(record.type) == 'U') {
         var payload = record.payload;
         var uri = String.fromCharCodes(payload.sublist(1));
@@ -92,6 +106,7 @@ class TagStampBloc extends Bloc<TagStampEvent, TagStampState> {
   }
 
   Future<bool> _biometricAuthentication() async {
+    if (_isCancelled) return false;
     return await LocalAuthRepository.authenticate();
   }
 
@@ -120,6 +135,8 @@ class TagStampBloc extends Bloc<TagStampEvent, TagStampState> {
   }
 
   Future<bool> _sendClockInToDB(TagStampModel tagStampInfo) async {
+    if (_isCancelled) return false;
+
     final devicePosition = await _determinePosition();
     final distance = Geolocator.distanceBetween(
         tagStampInfo.coordinates.first,
