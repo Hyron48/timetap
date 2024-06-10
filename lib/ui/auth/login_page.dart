@@ -92,7 +92,7 @@ class LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: [
                         SvgPicture.asset(
-                          'assets/svg/login-placeholder.svg',
+                          'assets/svg/login_placeholder.svg',
                           width: (MediaQuery.of(context).size.width / 5),
                           height: (MediaQuery.of(context).size.height / 5),
                         ),

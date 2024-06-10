@@ -99,7 +99,7 @@ class RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       children: [
                         SvgPicture.asset(
-                          'assets/svg/registration-placeholder.svg',
+                          'assets/svg/registration_placeholder.svg',
                           width: (MediaQuery.of(context).size.width / 5),
                           height: (MediaQuery.of(context).size.height / 5),
                         ),

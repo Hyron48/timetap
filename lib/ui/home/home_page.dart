@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16.0),
           child: Text(
             AppLocalizations.of(context)?.homeHeader ?? 'Not Found',
-            style: TextStyle(fontSize: fontSizeTitle),
+            style: TextStyle(fontSize: fontSizeTitle, color: bluePrimary),
           ),
         ),
       ),
@@ -80,11 +80,10 @@ class HomePage extends StatelessWidget {
           if (tagStampState is ClockingInState) {
             info.title = Text(
               AppLocalizations.of(context)?.readNFCHeader ?? 'Not Found',
-              style: TextStyle(
-                  fontSize: fontSizeTitle, fontWeight: mediumFontWeight),
+              style: TextStyle(fontSize: fontSizeTitle, fontWeight: mediumFontWeight, color: bluePrimary),
             );
             info.icon = SvgPicture.asset(
-              'assets/svg/nfc-reading.svg',
+              'assets/svg/nfc_reading.svg',
               width: 100,
               height: 100,
             );
@@ -98,8 +97,7 @@ class HomePage extends StatelessWidget {
           if (tagStampState is ReadNfcState) {
             info.title = Text(
               AppLocalizations.of(context)?.verifyPhaseHeader ?? 'Not Found',
-              style: TextStyle(
-                  fontSize: fontSizeTitle, fontWeight: mediumFontWeight),
+              style: TextStyle(fontSize: fontSizeTitle, fontWeight: mediumFontWeight, color: bluePrimary),
             );
             info.icon = CircularProgressIndicator(color: black);
             info.bodyMessage = Text(
@@ -112,8 +110,7 @@ class HomePage extends StatelessWidget {
           if (tagStampState is ClockInSuccessState) {
             info.title = Text(
               AppLocalizations.of(context)?.tapSuccessHeader ?? 'Not Found',
-              style: TextStyle(
-                  fontSize: fontSizeTitle, fontWeight: mediumFontWeight),
+              style: TextStyle(fontSize: fontSizeTitle, fontWeight: mediumFontWeight, color: bluePrimary),
             );
             info.icon = Icon(
               Icons.check,
@@ -130,8 +127,7 @@ class HomePage extends StatelessWidget {
           if (tagStampState is ClockInErrorState) {
             info.title = Text(
               AppLocalizations.of(context)?.tapErrorHeader ?? 'Not Found',
-              style: TextStyle(
-                  fontSize: fontSizeTitle, fontWeight: mediumFontWeight),
+              style: TextStyle(fontSize: fontSizeTitle, fontWeight: mediumFontWeight, color: bluePrimary),
             );
             info.icon = Icon(
               Icons.error_outline,

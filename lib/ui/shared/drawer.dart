@@ -37,7 +37,7 @@ class NavigatorDrawer extends StatelessWidget {
                     Row(
                       children: [
                         SvgPicture.asset(
-                          'assets/svg/logo-only-text.svg',
+                          'assets/svg/logo_only_text.svg',
                           width: MediaQuery.of(context).size.width / 35,
                           height: MediaQuery.of(context).size.height / 35,
                         ),
