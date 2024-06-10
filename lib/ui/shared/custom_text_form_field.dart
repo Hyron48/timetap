@@ -41,7 +41,7 @@ class CustomTextFormField extends StatelessWidget {
     OutlineInputBorder border = textFieldBorder;
     return (disabled == true)
         ? border.copyWith(
-            borderSide: const BorderSide(color: dividerColor),
+            borderSide: const BorderSide(color: lightGrey),
           )
         : border;
   }

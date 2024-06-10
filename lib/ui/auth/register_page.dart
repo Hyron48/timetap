@@ -103,7 +103,7 @@ class RegisterPageState extends State<RegisterPage> {
                           width: (MediaQuery.of(context).size.width / 5),
                           height: (MediaQuery.of(context).size.height / 5),
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 8.0),
                         Text(
                           AppLocalizations.of(context)
                                   ?.registrationTitle
@@ -114,6 +114,7 @@ class RegisterPageState extends State<RegisterPage> {
                             color: bluePrimary,
                           ),
                         ),
+                        SizedBox(height: 16),
                         CustomTextFormField(
                           textEditingController: _firstNameController,
                           label: AppLocalizations.of(context)?.firstName ??

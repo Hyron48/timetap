@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:timetap/bloc/tag_stamp/tag_stamp_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:timetap/ui/shared/drawer.dart';
@@ -80,7 +79,10 @@ class HomePage extends StatelessWidget {
           if (tagStampState is ClockingInState) {
             info.title = Text(
               AppLocalizations.of(context)?.readNFCHeader ?? 'Not Found',
-              style: TextStyle(fontSize: fontSizeTitle, fontWeight: mediumFontWeight, color: bluePrimary),
+              style: TextStyle(
+                  fontSize: fontSizeTitle,
+                  fontWeight: mediumFontWeight,
+                  color: bluePrimary),
             );
             info.icon = SvgPicture.asset(
               'assets/svg/nfc_reading.svg',
@@ -97,7 +99,10 @@ class HomePage extends StatelessWidget {
           if (tagStampState is ReadNfcState) {
             info.title = Text(
               AppLocalizations.of(context)?.verifyPhaseHeader ?? 'Not Found',
-              style: TextStyle(fontSize: fontSizeTitle, fontWeight: mediumFontWeight, color: bluePrimary),
+              style: TextStyle(
+                  fontSize: fontSizeTitle,
+                  fontWeight: mediumFontWeight,
+                  color: bluePrimary),
             );
             info.icon = CircularProgressIndicator(color: black);
             info.bodyMessage = Text(
@@ -110,7 +115,10 @@ class HomePage extends StatelessWidget {
           if (tagStampState is ClockInSuccessState) {
             info.title = Text(
               AppLocalizations.of(context)?.tapSuccessHeader ?? 'Not Found',
-              style: TextStyle(fontSize: fontSizeTitle, fontWeight: mediumFontWeight, color: bluePrimary),
+              style: TextStyle(
+                  fontSize: fontSizeTitle,
+                  fontWeight: mediumFontWeight,
+                  color: bluePrimary),
             );
             info.icon = Icon(
               Icons.check,
@@ -127,7 +135,10 @@ class HomePage extends StatelessWidget {
           if (tagStampState is ClockInErrorState) {
             info.title = Text(
               AppLocalizations.of(context)?.tapErrorHeader ?? 'Not Found',
-              style: TextStyle(fontSize: fontSizeTitle, fontWeight: mediumFontWeight, color: bluePrimary),
+              style: TextStyle(
+                  fontSize: fontSizeTitle,
+                  fontWeight: mediumFontWeight,
+                  color: bluePrimary),
             );
             info.icon = Icon(
               Icons.error_outline,
@@ -208,10 +219,11 @@ class HomePage extends StatelessWidget {
           showGeneralDialog(context, info);
 
           if (tagStampState is ClockInSuccessState) {
+            BlocProvider.of<TagStampBloc>(context).add(CancelClockIn());
             Future.delayed(
-                const Duration(seconds: 3),
-                () => Navigator.of(context)
-                    .popAndPushNamed(Routes.tagHistoryRoute));
+              const Duration(seconds: 3),
+              () => Navigator.of(context).popAndPushNamed(Routes.tagHistoryRoute),
+            );
           }
         },
         child: Stack(

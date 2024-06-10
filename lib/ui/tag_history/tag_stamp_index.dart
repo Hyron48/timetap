@@ -29,12 +29,12 @@ class TagStampIndex extends StatelessWidget {
         tag: tagStamp.id,
         child: Text(
           tagStamp.positionLabel,
-          style: TextStyle(color: black, fontSize: 15),
+          style: TextStyle(color: black, fontSize: 15.0),
         ),
       ),
       trailing: Text(
         formatDateTime(tagStamp.timeCode.toString()),
-        style: TextStyle(color: darkGrey, fontSize: 12),
+        style: TextStyle(color: darkGrey, fontSize: 12.0),
       ),
       onTap: () {
         Navigator.of(context)

@@ -18,11 +18,11 @@ class GenericInfoRow extends StatelessWidget {
       children: <Widget>[
         Text(
           label,
-          style: TextStyle(color: darkGrey, fontSize: 13),
+          style: TextStyle(color: darkGrey, fontSize: smallestFontSize),
         ),
         Text(
           value,
-          style: TextStyle(color: black, fontSize: 16),
+          style: TextStyle(color: black, fontSize: fontSizeText),
         ),
       ],
     );

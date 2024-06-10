@@ -96,7 +96,7 @@ class LoginPageState extends State<LoginPage> {
                           width: (MediaQuery.of(context).size.width / 5),
                           height: (MediaQuery.of(context).size.height / 5),
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 8.0),
                         Text(
                           AppLocalizations.of(context)
                                   ?.loginTitle
@@ -107,6 +107,7 @@ class LoginPageState extends State<LoginPage> {
                             color: bluePrimary,
                           ),
                         ),
+                        SizedBox(height: 16.0),
                         CustomTextFormField(
                           textEditingController: _emailController,
                           label: AppLocalizations.of(context)?.email ??

@@ -10,13 +10,16 @@ class ShimmerList extends StatelessWidget {
       itemCount: 10,
       itemBuilder: (context, index) {
         return Shimmer.fromColors(
-          baseColor: offWhite,
-          highlightColor: lightGrey,
+          baseColor: backgroundColor,
+          highlightColor: backgroundDarkColor,
           child: ListTile(
-            title: Container(
-              height: 40,
-              color: white,
-              margin: EdgeInsets.symmetric(vertical: 5),
+            title: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                height: 40,
+                color: white,
+                margin: EdgeInsets.symmetric(vertical: 5),
+              ),
             ),
           ),
         );
