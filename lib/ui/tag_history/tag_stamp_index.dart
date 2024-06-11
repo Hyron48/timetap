@@ -29,7 +29,10 @@ class TagStampIndex extends StatelessWidget {
         tag: tagStamp.id,
         child: Text(
           tagStamp.positionLabel,
-          style: TextStyle(color: black, fontSize: 15.0),
+          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                fontSize: 15.0,
+                color: black,
+          ),
         ),
       ),
       trailing: Text(

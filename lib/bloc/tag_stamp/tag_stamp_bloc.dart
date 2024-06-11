@@ -9,6 +9,7 @@ import '../../repository/local_auth/local_auth_repository.dart';
 import '../../utils/custom_exception.dart';
 
 part 'tag_stamp_events.dart';
+
 part 'tag_stamp_state.dart';
 
 class TagStampBloc extends Bloc<TagStampEvent, TagStampState> {
@@ -25,13 +26,14 @@ class TagStampBloc extends Bloc<TagStampEvent, TagStampState> {
   }
 
   Future<void> _execClockIn(
-      ExecClockIn event,
-      Emitter<TagStampState> emit,
-      ) async {
+    ExecClockIn event,
+    Emitter<TagStampState> emit,
+  ) async {
     _isCancelled = false;
 
-    bool isAvailable = await NfcManager.instance.isAvailable();
-    if (!isAvailable) {
+    bool isNfcAvailable = await NfcManager.instance.isAvailable();
+    bool isGeolocatorAvailable = await _manageGeolocatorPermission();
+    if (!isNfcAvailable || !isGeolocatorAvailable) {
       emit(NoSensorActiveState());
       return;
     }
@@ -44,7 +46,9 @@ class TagStampBloc extends Bloc<TagStampEvent, TagStampState> {
         return;
       }
       emit(ReadNfcState());
-      emit(await _onDiscoveredTag(tag) ? ClockInSuccessState() : ClockInErrorState());
+      emit(await _onDiscoveredTag(tag)
+          ? ClockInSuccessState()
+          : ClockInErrorState());
       completer.complete();
     });
     await completer.future;
@@ -61,11 +65,11 @@ class TagStampBloc extends Bloc<TagStampEvent, TagStampState> {
 
     final ndef = Ndef.from(tag);
     if (ndef == null) {
-      print('No NDEF data found on tag');
       return false;
     }
     final record = ndef.cachedMessage?.records.firstOrNull;
-    if ((record != null) && record.typeNameFormat == NdefTypeNameFormat.nfcWellknown) {
+    if ((record != null) &&
+        record.typeNameFormat == NdefTypeNameFormat.nfcWellknown) {
       if (String.fromCharCodes(record.type) == 'U') {
         var payload = record.payload;
         var uri = String.fromCharCodes(payload.sublist(1));
@@ -110,46 +114,49 @@ class TagStampBloc extends Bloc<TagStampEvent, TagStampState> {
     return await LocalAuthRepository.authenticate();
   }
 
-  Future<Position> _determinePosition() async {
+  Future<bool> _manageGeolocatorPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      return false;
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        return false;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return false;
     }
-    return await Geolocator.getCurrentPosition();
+
+    return true;
   }
 
   Future<bool> _sendClockInToDB(TagStampModel tagStampInfo) async {
     if (_isCancelled) return false;
 
-    final devicePosition = await _determinePosition();
+    final devicePosition = await Geolocator.getCurrentPosition();
     final distance = Geolocator.distanceBetween(
-        tagStampInfo.coordinates.first,
-        tagStampInfo.coordinates.last,
-        devicePosition.latitude,
-        devicePosition.longitude);
-
+      tagStampInfo.coordinates.first,
+      tagStampInfo.coordinates.last,
+      devicePosition.latitude,
+      devicePosition.longitude,
+    );
     if (distance < toleranceMeter) {
       try {
         await _tagStampRepository.addNewTagStamp(
           coordinates: tagStampInfo.coordinates,
           label: tagStampInfo.positionLabel,
         );
+        _isCancelled = true;
+        NfcManager.instance.stopSession();
         return true;
       } on CustomException catch (ex) {
         return false;

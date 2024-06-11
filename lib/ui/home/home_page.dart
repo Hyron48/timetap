@@ -25,16 +25,13 @@ class HomePage extends StatelessWidget {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  height: 50.0,
-                  width: 50.0,
-                  child: Center(child: info.icon),
-                ),
-                SizedBox(
-                  height: 16,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
+                  child: SizedBox(
+                    height: 50.0,
+                    width: 50.0,
+                    child: Center(child: info.icon),
+                  ),
                 ),
                 if (info.bodyMessage != null) info.bodyMessage!,
                 if (info.btn != null) info.btn!
@@ -74,15 +71,14 @@ class HomePage extends StatelessWidget {
 
           if (tagStampState is ClockInCancelledState) {
             return;
-          }
-
-          if (tagStampState is ClockingInState) {
+          } else if (tagStampState is ClockingInState) {
             info.title = Text(
               AppLocalizations.of(context)?.readNFCHeader ?? 'Not Found',
               style: TextStyle(
-                  fontSize: fontSizeTitle,
-                  fontWeight: mediumFontWeight,
-                  color: bluePrimary),
+                fontSize: fontSizeTitle,
+                fontWeight: mediumFontWeight,
+                color: bluePrimary,
+              ),
             );
             info.icon = SvgPicture.asset(
               'assets/svg/nfc_reading.svg',
@@ -92,33 +88,35 @@ class HomePage extends StatelessWidget {
             info.bodyMessage = Text(
               AppLocalizations.of(context)?.readNFCMessage ?? 'Not Found',
               style: TextStyle(
-                  fontSize: fontSizeText, fontWeight: lightFontWeight),
+                fontSize: fontSizeText,
+                fontWeight: lightFontWeight,
+              ),
             );
-          }
-
-          if (tagStampState is ReadNfcState) {
+          } else if (tagStampState is ReadNfcState) {
             info.title = Text(
               AppLocalizations.of(context)?.verifyPhaseHeader ?? 'Not Found',
               style: TextStyle(
-                  fontSize: fontSizeTitle,
-                  fontWeight: mediumFontWeight,
-                  color: bluePrimary),
+                fontSize: fontSizeTitle,
+                fontWeight: mediumFontWeight,
+                color: bluePrimary,
+              ),
             );
             info.icon = CircularProgressIndicator(color: black);
             info.bodyMessage = Text(
               AppLocalizations.of(context)?.verifyPhaseMessage ?? 'Not Found',
               style: TextStyle(
-                  fontSize: fontSizeText, fontWeight: lightFontWeight),
+                fontSize: fontSizeText,
+                fontWeight: lightFontWeight,
+              ),
             );
-          }
-
-          if (tagStampState is ClockInSuccessState) {
+          } else if (tagStampState is ClockInSuccessState) {
             info.title = Text(
               AppLocalizations.of(context)?.tapSuccessHeader ?? 'Not Found',
               style: TextStyle(
-                  fontSize: fontSizeTitle,
-                  fontWeight: mediumFontWeight,
-                  color: bluePrimary),
+                fontSize: fontSizeTitle,
+                fontWeight: mediumFontWeight,
+                color: bluePrimary,
+              ),
             );
             info.icon = Icon(
               Icons.check,
@@ -128,17 +126,20 @@ class HomePage extends StatelessWidget {
             info.bodyMessage = Text(
               AppLocalizations.of(context)?.tapSuccessMessage ?? 'Not Found',
               style: TextStyle(
-                  fontSize: fontSizeText, fontWeight: lightFontWeight),
+                fontSize: fontSizeText,
+                fontWeight: lightFontWeight,
+              ),
             );
-          }
-
-          if (tagStampState is ClockInErrorState) {
+          } else if (tagStampState is ClockInErrorState) {
             info.title = Text(
-              AppLocalizations.of(context)?.tapErrorHeader ?? 'Not Found',
+              AppLocalizations
+                  .of(context)
+                  ?.tapErrorHeader ?? 'Not Found',
               style: TextStyle(
-                  fontSize: fontSizeTitle,
-                  fontWeight: mediumFontWeight,
-                  color: bluePrimary),
+                fontSize: fontSizeTitle,
+                fontWeight: mediumFontWeight,
+                color: bluePrimary,
+              ),
             );
             info.icon = Icon(
               Icons.error_outline,
@@ -146,7 +147,9 @@ class HomePage extends StatelessWidget {
               size: 50,
             );
             info.bodyMessage = Text(
-              AppLocalizations.of(context)?.generalErrorMessage ?? 'Not Found',
+              AppLocalizations
+                  .of(context)
+                  ?.generalErrorMessage ?? 'Not Found',
               style: TextStyle(
                   fontSize: fontSizeText, fontWeight: lightFontWeight),
             );
@@ -157,19 +160,19 @@ class HomePage extends StatelessWidget {
                 backgroundColor: bluePrimary,
                 elevation: 0,
                 padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
               child: Text(
-                AppLocalizations.of(context)?.retryBtn ?? 'Not Found',
+                AppLocalizations
+                    .of(context)
+                    ?.retryBtn ?? 'Not Found',
                 style: TextStyle(color: white),
               ),
             );
-          }
-
-          if (tagStampState is NoSensorActiveState) {
+          } else if (tagStampState is NoSensorActiveState) {
             info.title = Text(
               AppLocalizations.of(context)?.sensorDisabledTitle ?? 'Not Found',
               style: TextStyle(
@@ -178,16 +181,19 @@ class HomePage extends StatelessWidget {
             info.icon = Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.nfc,
-                  color: black,
+                Padding(
+                  padding: EdgeInsets.only(right: 8.0),
+                  child: Icon(
+                    Icons.nfc,
+                    color: black,
+                  ),
                 ),
-                SizedBox(
-                  width: 16,
-                ),
-                Icon(
-                  Icons.gps_fixed,
-                  color: black,
+                Padding(
+                  padding: EdgeInsets.only(left : 8.0),
+                  child: Icon(
+                    Icons.gps_fixed,
+                    color: black,
+                  ),
                 ),
               ],
             );
@@ -219,17 +225,14 @@ class HomePage extends StatelessWidget {
           showGeneralDialog(context, info);
 
           if (tagStampState is ClockInSuccessState) {
-            BlocProvider.of<TagStampBloc>(context).add(CancelClockIn());
-            Future.delayed(
-              const Duration(seconds: 3),
-              () => Navigator.of(context).popAndPushNamed(Routes.tagHistoryRoute),
-            );
+            Future.delayed(const Duration(seconds: 3), () {
+              Navigator.of(context).pushNamedAndRemoveUntil(Routes.tagHistoryRoute, (route) => false);
+            });
           }
         },
-        child: Stack(
+        child: Align(
           alignment: Alignment.center,
-          children: <Widget>[
-            GestureDetector(
+          child: GestureDetector(
               onTap: () => refreshAlertDialog(context),
               child: Center(
                 child: SvgPicture.asset(
@@ -239,7 +242,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-          ],
         ),
       ),
     );
