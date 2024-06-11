@@ -88,6 +88,7 @@ class TagStampDetailState extends State<TagStampDetail> {
         label: AppLocalizations.of(context)?.tagDetailTimeLabel ?? 'Not Found',
         value: formatDateTime(widget.tagStamp.timeCode.toString()),
       ),
+      SizedBox(height: 16.0),
     ];
 
     if (isLoadedAddress && address.isEmpty) {
@@ -166,7 +167,7 @@ class TagStampDetailState extends State<TagStampDetail> {
           tag: widget.tagStamp.id,
           child: Text(
             widget.tagStamp.positionLabel,
-            style: TextStyle(color: black),
+            style: TextStyle(fontSize: fontSizeTitle, color: bluePrimary),
           ),
         ),
       ),

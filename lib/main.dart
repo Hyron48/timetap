@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timetap/bloc/auth/auth_bloc.dart';
 import 'package:timetap/repository/auth/auth_repository.dart';
 import 'package:timetap/repository/tag_stamp/tag_stamp_repository.dart';
+import 'package:timetap/utils/constants.dart';
 import 'package:timetap/utils/flavor_config.dart';
 import 'package:timetap/utils/routes.dart';
 import 'bloc/locale_cubit.dart';
@@ -88,7 +89,15 @@ class _MyAppState extends State<MyApp> {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           debugShowCheckedModeBanner: false,
-          themeMode: ThemeMode.light,
+          theme: ThemeData(
+            scaffoldBackgroundColor: backgroundColor,
+            appBarTheme: AppBarTheme(
+              backgroundColor: backgroundColor,
+            ),
+            drawerTheme: DrawerThemeData(
+              backgroundColor: backgroundColor,
+            ),
+          ),
           locale: userLocale ?? locale,
           onGenerateRoute: (RouteSettings settings) => Routes.generateRoute(
             settings,

@@ -17,9 +17,9 @@
   "password": "Password",
   "confirmPassword": "Confirm Password",
   "rememberMe": "Remember Me",
-  "notRegisteredMessage": "Do not have an account? Register ",
+  "notRegisteredMessage": "Do not have an account?",
   "alreadyRegisteredMessage": "Do you already have an account? ",
-  "thereMessage": "qui",
+  "signup": "Register",
   "signIn": "Log in",
 
   "isFieldEmpty": "Required field.",
@@ -35,6 +35,9 @@
   "tapSuccessHeader": "Tap completed",
   "tapSuccessMessage": "You will be redirected to your tap history.",
   "tapErrorHeader": "Error",
+  "sensorDisabledTitle": "Sensor problem",
+  "sensorDisabledMessage": "To continue, please activate NFC and GPS.",
+  "retryBtn": "Retry",
 
   "tagHistoryTitle": "History",
   "tagDetailTimeLabel": "Time clock in: ",

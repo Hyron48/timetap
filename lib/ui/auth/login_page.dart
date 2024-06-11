@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:timetap/utils/constants.dart';
 
 import '../../bloc/auth/auth_bloc.dart';
 import '../../utils/regex.dart';
 import '../../utils/routes.dart';
+import '../shared/custom_text_form_field.dart';
 import '../shared/language_dropdown.dart';
 
 class LoginPage extends StatefulWidget {
-
   const LoginPage({
     super.key,
   });
@@ -54,7 +55,6 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)?.loginTitle ?? 'Not found'),
         actions: [
           LanguageDropdown(),
         ],
@@ -84,20 +84,34 @@ class LoginPageState extends State<LoginPage> {
         child: Form(
           key: formKey,
           child: Padding(
-            padding: EdgeInsets.all(32.0),
+            padding: EdgeInsets.fromLTRB(32.0, 0, 32.0, 0),
             child: Column(
               children: <Widget>[
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        TextFormField(
-                          controller: _emailController,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)?.email ??
-                                'Not Found',
+                        SvgPicture.asset(
+                          'assets/svg/login_placeholder.svg',
+                          width: (MediaQuery.of(context).size.width / 5),
+                          height: (MediaQuery.of(context).size.height / 5),
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          AppLocalizations.of(context)
+                                  ?.loginTitle
+                                  .toUpperCase() ??
+                              'Not found',
+                          style: TextStyle(
+                            fontSize: fontSizeTitle,
+                            color: bluePrimary,
                           ),
+                        ),
+                        SizedBox(height: 16.0),
+                        CustomTextFormField(
+                          textEditingController: _emailController,
+                          label: AppLocalizations.of(context)?.email ??
+                              'Not Found',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return AppLocalizations.of(context)
@@ -111,27 +125,21 @@ class LoginPageState extends State<LoginPage> {
                             }
                             return null;
                           },
+                          textInputAction: TextInputAction.next,
+                          suffixIcon: Padding(
+                            padding: EdgeInsetsDirectional.only(end: 12.0),
+                            child: Icon(
+                                Icons.alternate_email_outlined,
+                                color: lightGrey,
+                            ),
+                          ),
                         ),
                         SizedBox(height: 16),
-                        TextFormField(
-                          controller: _passwordController,
+                        CustomTextFormField(
+                          textEditingController: _passwordController,
                           obscureText: !isPasswordVisible,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)?.password ??
-                                'Not Found',
-                            errorMaxLines: 3,
-                            suffixIcon: Padding(
-                                padding: EdgeInsetsDirectional.only(end: 12.0),
-                                child: GestureDetector(
-                                  child: isPasswordVisible
-                                      ? Icon(Icons.visibility_off_outlined)
-                                      : Icon(Icons.visibility_outlined),
-                                  onTap: () => setState(() {
-                                    isPasswordVisible = !isPasswordVisible;
-                                  }),
-                                )),
-                          ),
+                          label: AppLocalizations.of(context)?.password ??
+                              'Not Found',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return AppLocalizations.of(context)
@@ -145,26 +153,53 @@ class LoginPageState extends State<LoginPage> {
                             }
                             return null;
                           },
+                          textInputAction: TextInputAction.next,
+                          suffixIcon: Padding(
+                            padding: EdgeInsetsDirectional.only(end: 12.0),
+                            child: GestureDetector(
+                              child: isPasswordVisible
+                                  ? Icon(
+                                      Icons.visibility_off_outlined,
+                                      color: lightGrey,
+                                    )
+                                  : Icon(
+                                      Icons.visibility_outlined,
+                                      color: lightGrey,
+                                    ),
+                              onTap: () => setState(() {
+                                isPasswordVisible = !isPasswordVisible;
+                              }),
+                            ),
+                          ),
                         ),
-                        SizedBox(height: 32),
+                        SizedBox(height: 16),
                         Row(
                           children: [
-                            Text(AppLocalizations.of(context)
-                                    ?.notRegisteredMessage ??
-                                'Not Found'),
-                            GestureDetector(
-                              onTap: () => Navigator.of(context)
+                            Text(
+                              AppLocalizations.of(context)
+                                      ?.notRegisteredMessage ??
+                                  'Not Found',
+                            ),
+                            Spacer(),
+                            OutlinedButton(
+                              onPressed: () => Navigator.of(context)
                                   .pushReplacementNamed(Routes.registerRoute),
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(color: bluePrimary),
+                                  backgroundColor: white,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 12.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  )),
                               child: Text(
-                                AppLocalizations.of(context)?.thereMessage ??
+                                AppLocalizations.of(context)?.signup ??
                                     'Not Found',
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: bluePrimary),
+                                style: TextStyle(color: bluePrimary),
                               ),
                             ),
                           ],
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -177,13 +212,30 @@ class LoginPageState extends State<LoginPage> {
                     (MediaQuery.of(context).viewInsets.bottom == 0) ? 50.0 : 0,
                   ),
                   child: ElevatedButton(
-                    onPressed: () {
-                      submitLoginForm();
-                    },
+                    onPressed: () => submitLoginForm(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: bluePrimary,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
                     child: sendingApiBtn
-                        ? CircularProgressIndicator(color: white)
-                        : Text(AppLocalizations.of(context)?.loginButton ??
-                            'Not Found'),
+                        ? SizedBox(
+                            width: 24.0,
+                            height: 24.0,
+                            child: CircularProgressIndicator(
+                              color: white,
+                              strokeWidth: 2.0,
+                            ),
+                          )
+                        : Text(
+                            AppLocalizations.of(context)?.loginButton ??
+                                'Not Found',
+                            style: TextStyle(color: white),
+                          ),
                   ),
                 )
               ],
