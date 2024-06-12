@@ -34,39 +34,49 @@ class NavigatorDrawer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          'assets/svg/logo_only_text.svg',
-                          width: MediaQuery.of(context).size.width / 35,
-                          height: MediaQuery.of(context).size.height / 35,
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 12.0),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/svg/logo_only_text.svg',
+                            width: MediaQuery.of(context).size.width / 35,
+                            height: MediaQuery.of(context).size.height / 35,
+                          ),
+                          Spacer(),
+                          LanguageDropdown(),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12.0),
+                      child: Text(
+                        AppLocalizations.of(context)?.email ?? 'Not Found',
+                        style: TextStyle(color: darkGrey, fontSize: 13),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12.0),
+                      child: Text(
+                        context.read<AuthBloc>().getUserEmail(),
+                        style: TextStyle(color: black, fontSize: 16),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 12.0),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(
+                          Icons.home_outlined,
+                          color: bluePrimary,
                         ),
-                        Spacer(),
-                        LanguageDropdown(),
-                      ],
-                    ),
-                    const SizedBox(height: 24.0),
-                    Text(
-                      AppLocalizations.of(context)?.email ?? 'Not Found',
-                      style: TextStyle(color: darkGrey, fontSize: 13),
-                    ),
-                    Text(
-                      context.read<AuthBloc>().getUserEmail(),
-                      style: TextStyle(color: black, fontSize: 16),
-                    ),
-                    const SizedBox(height: 24.0),
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(
-                        Icons.home_outlined,
-                        color: bluePrimary,
+                        title: Text(
+                          AppLocalizations.of(context)?.menuHome ?? 'Not Found',
+                          style: TextStyle(fontWeight: lightFontWeight),
+                        ),
+                        onTap: () => Navigator.of(context)
+                            .pushReplacementNamed(Routes.initialRoute),
                       ),
-                      title: Text(
-                        AppLocalizations.of(context)?.menuHome ?? 'Not Found',
-                        style: TextStyle(fontWeight: lightFontWeight),
-                      ),
-                      onTap: () => Navigator.of(context)
-                          .pushReplacementNamed(Routes.initialRoute),
                     ),
                     ListTile(
                       contentPadding: EdgeInsets.zero,

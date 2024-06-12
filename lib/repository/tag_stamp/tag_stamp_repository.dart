@@ -14,27 +14,25 @@ class TagStampRepository {
   static late http.Client client;
 
   TagStampRepository() {
-    client = InterceptedClient.build(interceptors: [CustomInterceptor()], retryPolicy: ExpiredTokenRetryPolicy());
+    client = InterceptedClient.build(
+        interceptors: [CustomInterceptor()],
+        retryPolicy: ExpiredTokenRetryPolicy());
   }
 
-  Future<bool> addNewTagStamp({
+  Future<void> addNewTagStamp({
     required List<double> coordinates,
     required String label,
   }) async {
     Uri uri = Uri.parse('${FlavorConfig.instance.values.appUrl}/tag-stamp');
 
     try {
-      var response = await client.post(
+      await client.post(
         uri,
         body: jsonEncode({
-            'positionLabel': label.replaceAll('+', ' '),
-            'coordinates': coordinates,
-          }),
+          'positionLabel': label.replaceAll('+', ' '),
+          'coordinates': coordinates,
+        }),
       );
-
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      final tagStamp = TagStampModel.fromJson(responseBody);
-      return tagStamp.id != '';
     } catch (ex) {
       throw CustomException(
         statusCode: 0,
@@ -49,7 +47,9 @@ class TagStampRepository {
     try {
       var response = await client.get(uri);
       final List<dynamic> responseBody = jsonDecode(response.body);
-      final List<TagStampModel> parsedList = responseBody.map((tagStamp) => TagStampModel.fromJson(tagStamp)).toList();
+      final List<TagStampModel> parsedList = responseBody
+          .map((tagStamp) => TagStampModel.fromJson(tagStamp))
+          .toList();
       return parsedList;
     } catch (ex) {
       throw CustomException(

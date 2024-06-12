@@ -51,10 +51,9 @@ class Routes {
         break;
     }
 
-    // Return a MaterialPageRoute with the selected page
     return MaterialPageRoute(
       builder: (context) => page,
-      settings: settings, // Pass the original settings to the route
+      settings: settings,
     );
   }
 }

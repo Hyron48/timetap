@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:timetap/bloc/locale_cubit.dart';
 import 'package:timetap/utils/constants.dart';
 
 import '../../bloc/auth/auth_bloc.dart';
@@ -59,28 +60,38 @@ class LoginPageState extends State<LoginPage> {
           LanguageDropdown(),
         ],
       ),
-      body: BlocListener<AuthBloc, BaseAuthState>(
-        listener: (BuildContext context, BaseAuthState loginState) {
-          if (loginState is InProgressAuthenticationState) {
-            changeLoadingApiStatus(true);
-            return;
-          }
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<LocaleCubit, Locale>(
+            listener: (BuildContext context, Locale state) {
+              formKey.currentState?.reset();
+              formKey.currentState?.validate();
+            },
+          ),
+          BlocListener<AuthBloc, BaseAuthState>(
+            listener: (BuildContext context, BaseAuthState loginState) {
+              if (loginState is InProgressAuthenticationState) {
+                changeLoadingApiStatus(true);
+                return;
+              }
 
-          if (loginState is AuthenticatedAuthState) {
-            Navigator.of(context).pushReplacementNamed(Routes.initialRoute);
-          }
+              if (loginState is AuthenticatedAuthState) {
+                Navigator.of(context).pushReplacementNamed(Routes.initialRoute);
+              }
 
-          changeLoadingApiStatus(false);
-          if (loginState is UnauthenticatedAuthState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(
-                AppLocalizations.of(context)?.generalErrorMessage ??
-                    'Not Found',
-              )),
-            );
-          }
-        },
+              changeLoadingApiStatus(false);
+              if (loginState is UnauthenticatedAuthState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                        AppLocalizations.of(context)?.generalErrorMessage ??
+                            'Not Found',
+                      )),
+                );
+              }
+            },
+          ),
+        ],
         child: Form(
           key: formKey,
           child: Padding(
@@ -91,93 +102,101 @@ class LoginPageState extends State<LoginPage> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        SvgPicture.asset(
-                          'assets/svg/login_placeholder.svg',
-                          width: (MediaQuery.of(context).size.width / 5),
-                          height: (MediaQuery.of(context).size.height / 5),
-                        ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          AppLocalizations.of(context)
-                                  ?.loginTitle
-                                  .toUpperCase() ??
-                              'Not found',
-                          style: TextStyle(
-                            fontSize: fontSizeTitle,
-                            color: bluePrimary,
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: SvgPicture.asset(
+                            'assets/svg/login_placeholder.svg',
+                            width: (MediaQuery.of(context).size.width / 5),
+                            height: (MediaQuery.of(context).size.height / 5),
                           ),
                         ),
-                        SizedBox(height: 16.0),
-                        CustomTextFormField(
-                          textEditingController: _emailController,
-                          label: AppLocalizations.of(context)?.email ??
-                              'Not Found',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(context)
-                                      ?.isFieldEmpty ??
-                                  'Not Found';
-                            }
-                            if (!emailRegex.hasMatch(value)) {
-                              return AppLocalizations.of(context)
-                                      ?.fieldNotValid ??
-                                  'Not Found';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 12.0),
-                            child: Icon(
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                ?.loginTitle
+                                .toUpperCase() ??
+                                'Not found',
+                            style: TextStyle(
+                              fontSize: fontSizeTitle,
+                              color: bluePrimary,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: CustomTextFormField(
+                            textEditingController: _emailController,
+                            label: AppLocalizations.of(context)?.email ??
+                                'Not Found',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(context)
+                                    ?.isFieldEmpty ??
+                                    'Not Found';
+                              }
+                              if (!emailRegex.hasMatch(value)) {
+                                return AppLocalizations.of(context)
+                                    ?.fieldNotValid ??
+                                    'Not Found';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            suffixIcon: Padding(
+                              padding: EdgeInsetsDirectional.only(end: 12.0),
+                              child: Icon(
                                 Icons.alternate_email_outlined,
                                 color: lightGrey,
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
-                        CustomTextFormField(
-                          textEditingController: _passwordController,
-                          obscureText: !isPasswordVisible,
-                          label: AppLocalizations.of(context)?.password ??
-                              'Not Found',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(context)
-                                      ?.isFieldEmpty ??
-                                  'Not Found';
-                            }
-                            if (!passwordRegex.hasMatch(value)) {
-                              return AppLocalizations.of(context)
-                                      ?.passwordNotValid ??
-                                  'Not Found';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 12.0),
-                            child: GestureDetector(
-                              child: isPasswordVisible
-                                  ? Icon(
-                                      Icons.visibility_off_outlined,
-                                      color: lightGrey,
-                                    )
-                                  : Icon(
-                                      Icons.visibility_outlined,
-                                      color: lightGrey,
-                                    ),
-                              onTap: () => setState(() {
-                                isPasswordVisible = !isPasswordVisible;
-                              }),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: CustomTextFormField(
+                            textEditingController: _passwordController,
+                            obscureText: !isPasswordVisible,
+                            label: AppLocalizations.of(context)?.password ??
+                                'Not Found',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(context)
+                                    ?.isFieldEmpty ??
+                                    'Not Found';
+                              }
+                              if (!passwordRegex.hasMatch(value)) {
+                                return AppLocalizations.of(context)
+                                    ?.passwordNotValid ??
+                                    'Not Found';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            suffixIcon: Padding(
+                              padding: EdgeInsetsDirectional.only(end: 12.0),
+                              child: GestureDetector(
+                                child: isPasswordVisible
+                                    ? Icon(
+                                  Icons.visibility_off_outlined,
+                                  color: lightGrey,
+                                )
+                                    : Icon(
+                                  Icons.visibility_outlined,
+                                  color: lightGrey,
+                                ),
+                                onTap: () => setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                }),
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
                         Row(
                           children: [
                             Text(
                               AppLocalizations.of(context)
-                                      ?.notRegisteredMessage ??
+                                  ?.notRegisteredMessage ??
                                   'Not Found',
                             ),
                             Spacer(),
@@ -224,18 +243,18 @@ class LoginPageState extends State<LoginPage> {
                     ),
                     child: sendingApiBtn
                         ? SizedBox(
-                            width: 24.0,
-                            height: 24.0,
-                            child: CircularProgressIndicator(
-                              color: white,
-                              strokeWidth: 2.0,
-                            ),
-                          )
+                      width: 24.0,
+                      height: 24.0,
+                      child: CircularProgressIndicator(
+                        color: white,
+                        strokeWidth: 2.0,
+                      ),
+                    )
                         : Text(
-                            AppLocalizations.of(context)?.loginButton ??
-                                'Not Found',
-                            style: TextStyle(color: white),
-                          ),
+                      AppLocalizations.of(context)?.loginButton ??
+                          'Not Found',
+                      style: TextStyle(color: white),
+                    ),
                   ),
                 )
               ],

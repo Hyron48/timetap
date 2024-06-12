@@ -129,7 +129,7 @@ class TagStampDetailState extends State<TagStampDetail> {
     return FlutterMap(
       options: MapOptions(
         initialCenter: point,
-        initialZoom: 11,
+        initialZoom: 18,
         interactionOptions:
             const InteractionOptions(flags: ~InteractiveFlag.rotate),
       ),
@@ -167,7 +167,10 @@ class TagStampDetailState extends State<TagStampDetail> {
           tag: widget.tagStamp.id,
           child: Text(
             widget.tagStamp.positionLabel,
-            style: TextStyle(fontSize: fontSizeTitle, color: bluePrimary),
+            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+              fontSize: fontSizeTitle,
+              color: bluePrimary,
+          ),
           ),
         ),
       ),

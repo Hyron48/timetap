@@ -27,7 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, BaseAuthState> {
         super(_determineInitialState(authRepository)) {
     on<AuthRegisterEvent>(_registerUser);
     on<AuthLoginEvent>(_loginWithCredentials);
-    on<AuthLogoutEvent>(_onLogout);
+    on<AuthLogoutEvent>(_logout);
   }
 
   Future<void> _registerUser(
@@ -57,7 +57,7 @@ class AuthBloc extends Bloc<AuthEvent, BaseAuthState> {
     }
   }
 
-  Future<void> _onLogout(
+  Future<void> _logout(
     AuthLogoutEvent event,
     Emitter<BaseAuthState> emit,
   ) async {

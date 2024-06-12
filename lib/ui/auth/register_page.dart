@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:timetap/bloc/auth/auth_bloc.dart';
 import 'package:timetap/models/auth/registration_model.dart';
 
+import '../../bloc/locale_cubit.dart';
 import '../../utils/constants.dart';
 import '../../utils/regex.dart';
 import '../../utils/routes.dart';
@@ -66,28 +67,38 @@ class RegisterPageState extends State<RegisterPage> {
           LanguageDropdown(),
         ],
       ),
-      body: BlocListener<AuthBloc, BaseAuthState>(
-        listener: (BuildContext context, BaseAuthState registrationState) {
-          if (registrationState is InProgressAuthenticationState) {
-            changeLoadingApiStatus(true);
-            return;
-          }
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<LocaleCubit, Locale>(
+            listener: (BuildContext context, Locale state) {
+              formKey.currentState?.reset();
+              formKey.currentState?.validate();
+            },
+          ),
+          BlocListener<AuthBloc, BaseAuthState>(
+            listener: (BuildContext context, BaseAuthState registrationState) {
+              if (registrationState is InProgressAuthenticationState) {
+                changeLoadingApiStatus(true);
+                return;
+              }
 
-          if (registrationState is RegistrationUserSuccessState) {
-            Navigator.of(context).pushReplacementNamed(Routes.initialRoute);
-          }
+              if (registrationState is RegistrationUserSuccessState) {
+                Navigator.of(context).pushReplacementNamed(Routes.initialRoute);
+              }
 
-          changeLoadingApiStatus(false);
-          if (registrationState is RegistrationUserErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(
-                AppLocalizations.of(context)?.generalErrorMessage ??
-                    'Not Found',
-              )),
-            );
-          }
-        },
+              changeLoadingApiStatus(false);
+              if (registrationState is RegistrationUserErrorState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                    AppLocalizations.of(context)?.generalErrorMessage ??
+                        'Not Found',
+                  )),
+                );
+              }
+            },
+          ),
+        ],
         child: Form(
           key: formKey,
           child: Padding(
@@ -98,164 +109,178 @@ class RegisterPageState extends State<RegisterPage> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        SvgPicture.asset(
-                          'assets/svg/registration_placeholder.svg',
-                          width: (MediaQuery.of(context).size.width / 5),
-                          height: (MediaQuery.of(context).size.height / 5),
-                        ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          AppLocalizations.of(context)
-                                  ?.registrationTitle
-                                  .toUpperCase() ??
-                              'Not found',
-                          style: TextStyle(
-                            fontSize: fontSizeTitle,
-                            color: bluePrimary,
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: SvgPicture.asset(
+                            'assets/svg/registration_placeholder.svg',
+                            width: (MediaQuery.of(context).size.width / 5),
+                            height: (MediaQuery.of(context).size.height / 5),
                           ),
                         ),
-                        SizedBox(height: 16),
-                        CustomTextFormField(
-                          textEditingController: _firstNameController,
-                          label: AppLocalizations.of(context)?.firstName ??
-                              'Not Found',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(context)
-                                      ?.isFieldEmpty ??
-                                  'Not Found';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        SizedBox(height: 16),
-                        CustomTextFormField(
-                          textEditingController: _lastNameController,
-                          label: AppLocalizations.of(context)?.lastName ??
-                              'Not Found',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(context)
-                                      ?.isFieldEmpty ??
-                                  'Not Found';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        SizedBox(height: 16),
-                        CustomTextFormField(
-                          textEditingController: _emailController,
-                          label: AppLocalizations.of(context)?.email ??
-                              'Not Found',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(context)
-                                      ?.isFieldEmpty ??
-                                  'Not Found';
-                            }
-                            if (!emailRegex.hasMatch(value)) {
-                              return AppLocalizations.of(context)
-                                      ?.fieldNotValid ??
-                                  'Not Found';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 12.0),
-                            child: Icon(
-                              Icons.alternate_email_outlined,
-                              color: lightGrey,
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                    ?.registrationTitle
+                                    .toUpperCase() ??
+                                'Not found',
+                            style: TextStyle(
+                              fontSize: fontSizeTitle,
+                              color: bluePrimary,
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
-                        CustomTextFormField(
-                          textEditingController: _passwordController,
-                          obscureText: !isPasswordVisible,
-                          label: AppLocalizations.of(context)?.password ??
-                              'Not Found',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(context)
-                                      ?.isFieldEmpty ??
-                                  'Not Found';
-                            }
-                            if (!passwordRegex.hasMatch(value)) {
-                              return AppLocalizations.of(context)
-                                      ?.passwordNotValid ??
-                                  'Not Found';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 12.0),
-                            child: GestureDetector(
-                              child: isPasswordVisible
-                                  ? Icon(
-                                      Icons.visibility_off_outlined,
-                                      color: lightGrey,
-                                    )
-                                  : Icon(
-                                      Icons.visibility_outlined,
-                                      color: lightGrey,
-                                    ),
-                              onTap: () => setState(() {
-                                isPasswordVisible = !isPasswordVisible;
-                              }),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: CustomTextFormField(
+                            textEditingController: _firstNameController,
+                            label: AppLocalizations.of(context)?.firstName ??
+                                'Not Found',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(context)
+                                        ?.isFieldEmpty ??
+                                    'Not Found';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: CustomTextFormField(
+                            textEditingController: _lastNameController,
+                            label: AppLocalizations.of(context)?.lastName ??
+                                'Not Found',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(context)
+                                        ?.isFieldEmpty ??
+                                    'Not Found';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: CustomTextFormField(
+                            textEditingController: _emailController,
+                            label: AppLocalizations.of(context)?.email ??
+                                'Not Found',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(context)
+                                        ?.isFieldEmpty ??
+                                    'Not Found';
+                              }
+                              if (!emailRegex.hasMatch(value)) {
+                                return AppLocalizations.of(context)
+                                        ?.fieldNotValid ??
+                                    'Not Found';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            suffixIcon: Padding(
+                              padding: EdgeInsetsDirectional.only(end: 12.0),
+                              child: Icon(
+                                Icons.alternate_email_outlined,
+                                color: lightGrey,
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
-                        CustomTextFormField(
-                          textEditingController: _confirmPasswordController,
-                          obscureText: !isConfirmPasswordVisible,
-                          label:
-                              AppLocalizations.of(context)?.confirmPassword ??
-                                  'Not Found',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(context)
-                                      ?.isFieldEmpty ??
-                                  'Not Found';
-                            }
-                            if (!passwordRegex.hasMatch(value)) {
-                              return AppLocalizations.of(context)
-                                      ?.passwordNotValid ??
-                                  'Not Found';
-                            }
-                            if (_passwordController.value.text != '' &&
-                                value != _passwordController.value.text) {
-                              return AppLocalizations.of(context)
-                                      ?.passwordNotMatch ??
-                                  'Not Found';
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.next,
-                          suffixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(end: 12.0),
-                            child: GestureDetector(
-                              child: isConfirmPasswordVisible
-                                  ? Icon(
-                                      Icons.visibility_off_outlined,
-                                      color: lightGrey,
-                                    )
-                                  : Icon(
-                                      Icons.visibility_outlined,
-                                      color: lightGrey,
-                                    ),
-                              onTap: () => setState(() {
-                                isConfirmPasswordVisible =
-                                    !isConfirmPasswordVisible;
-                              }),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: CustomTextFormField(
+                            textEditingController: _passwordController,
+                            obscureText: !isPasswordVisible,
+                            label: AppLocalizations.of(context)?.password ??
+                                'Not Found',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(context)
+                                        ?.isFieldEmpty ??
+                                    'Not Found';
+                              }
+                              if (!passwordRegex.hasMatch(value)) {
+                                return AppLocalizations.of(context)
+                                        ?.passwordNotValid ??
+                                    'Not Found';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            suffixIcon: Padding(
+                              padding: EdgeInsetsDirectional.only(end: 12.0),
+                              child: GestureDetector(
+                                child: isPasswordVisible
+                                    ? Icon(
+                                        Icons.visibility_off_outlined,
+                                        color: lightGrey,
+                                      )
+                                    : Icon(
+                                        Icons.visibility_outlined,
+                                        color: lightGrey,
+                                      ),
+                                onTap: () => setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                }),
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: CustomTextFormField(
+                            textEditingController: _confirmPasswordController,
+                            obscureText: !isConfirmPasswordVisible,
+                            label:
+                                AppLocalizations.of(context)?.confirmPassword ??
+                                    'Not Found',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(context)
+                                        ?.isFieldEmpty ??
+                                    'Not Found';
+                              }
+                              if (!passwordRegex.hasMatch(value)) {
+                                return AppLocalizations.of(context)
+                                        ?.passwordNotValid ??
+                                    'Not Found';
+                              }
+                              if (_passwordController.value.text != '' &&
+                                  value != _passwordController.value.text) {
+                                return AppLocalizations.of(context)
+                                        ?.passwordNotMatch ??
+                                    'Not Found';
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            suffixIcon: Padding(
+                              padding: EdgeInsetsDirectional.only(end: 12.0),
+                              child: GestureDetector(
+                                child: isConfirmPasswordVisible
+                                    ? Icon(
+                                        Icons.visibility_off_outlined,
+                                        color: lightGrey,
+                                      )
+                                    : Icon(
+                                        Icons.visibility_outlined,
+                                        color: lightGrey,
+                                      ),
+                                onTap: () => setState(() {
+                                  isConfirmPasswordVisible =
+                                      !isConfirmPasswordVisible;
+                                }),
+                              ),
+                            ),
+                          ),
+                        ),
                         Row(
                           children: [
                             Text(
