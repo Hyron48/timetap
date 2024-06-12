@@ -64,16 +64,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale? userLocale;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> localization() async {
-    userLocale = await ISecureStorage().getUserLocale();
-    setState(() {});
   }
 
   @override
@@ -83,7 +77,6 @@ class _MyAppState extends State<MyApp> {
       newLocale.languageCode !=
           AppLocalizations.of(context)?.localeName,
       builder: (BuildContext contextLocale, Locale locale) {
-        localization();
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -97,7 +90,7 @@ class _MyAppState extends State<MyApp> {
               backgroundColor: backgroundColor,
             ),
           ),
-          locale: userLocale ?? locale,
+          locale: locale,
           onGenerateRoute: (RouteSettings settings) => Routes.generateRoute(
             settings,
             context.read<AuthBloc>().isUserAlreadyLogged(),

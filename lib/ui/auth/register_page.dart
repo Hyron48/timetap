@@ -72,7 +72,6 @@ class RegisterPageState extends State<RegisterPage> {
           BlocListener<LocaleCubit, Locale>(
             listener: (BuildContext context, Locale state) {
               formKey.currentState?.reset();
-              formKey.currentState?.validate();
             },
           ),
           BlocListener<AuthBloc, BaseAuthState>(
