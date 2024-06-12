@@ -31,7 +31,6 @@ void main() async {
 
   final AuthRepository authRepository = AuthRepository();
   await authRepository.loadCurrentLoginModel();
-  await ISecureStorage().setDefaultLanguage(locale: Locale('it', 'IT'));
 
   Bloc.observer = Observer();
 

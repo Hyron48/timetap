@@ -11,8 +11,4 @@ class LocaleCubit extends Cubit<Locale> {
       await ISecureStorage().saveUserLocale(locale: locale.languageCode);
       emit(locale);
   }
-
-  Future<Locale?> getLanguage() async {
-    return await ISecureStorage().getUserLocale();
-  }
 }
